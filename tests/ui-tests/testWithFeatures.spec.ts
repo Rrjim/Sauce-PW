@@ -1,4 +1,4 @@
-import {test} from '../test-options'
+import {test} from '../../test-options'
 import {faker} from '@faker-js/faker'
 
 // test.beforeEach(async({page}) => {

@@ -21,13 +21,13 @@ export default defineConfig<TestOptions>({
   },
   // testDir: './tests', // DEFAULT VALUE CAN BE REMOVED
   /* Run tests in files in parallel */
-  // fullyParallel: false, // DEFAULT VALUE CAN BE REMOVED
+  fullyParallel: false, // DEFAULT VALUE CAN BE REMOVED
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   // forbidOnly: !!process.env.CI, // DEFAULT VALUE CAN BE REMOVED
-  /* Retry on CI only */
-  retries: 1,
+  /* Retry on CI/CD pipeline only */
+  retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  // workers: process.env.CI ? 1 : undefined, // DEFAULT VALUE CAN BE REMOVED
+  workers: process.env.CI ? 1 : undefined, // DEFAULT VALUE CAN BE REMOVED
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     process.env.CI ? ["dot"] : ["list"],
@@ -44,17 +44,18 @@ export default defineConfig<TestOptions>({
     ["json", { outputFile: "test-results/jsonReport.json" }],
     ["junit", { outputFile: "test-results/junitReport.xml" }],
     // ['allure-playwright'],
-    ["html"],
+    // block html reporter from opening automatically as it might block copilot
+    ["html", { open: "never" }],
   ],
   // ALLURE SETUP
   // npm install -g allure-commandline
   // allure generate allure-results -o allure-report --clean
-
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:4200',
     globalsQaURL: "https://www.globalsqa.com/demo-site/draganddrop/",
+    // baseURL is used for UI apps as well, we use api-config for API
     baseURL:
       process.env.DEV === "1"
         ? "http://localhost:4201/"
@@ -62,7 +63,18 @@ export default defineConfig<TestOptions>({
         ? "http://localhost:4202/"
         : "http://localhost:4200/",
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on-first-retry",
+    // trace is responsible for taking screenshots when a test fails (UI only)
+    trace: "retain-on-failure",
+    // API useful "use" for http requests
+    // NOTE if we specify extraHTTP/ httpCredentials in projects, it will overwright the global scope
+    // extraHTTP is not the best practice, since all the calls must include these headers
+    // extraHTTPHeaders: {
+    //   Authorization: 'Token sakdsakdsajdsajdjawaiewjqijr'
+    // },
+    // httpCredentials: {
+    //   username: '',
+    //   password: ''
+    // }
     actionTimeout: 5000,
     navigationTimeout: 5000,
     video: {
@@ -74,39 +86,58 @@ export default defineConfig<TestOptions>({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "chromium",
+      name: "ui-tests",
+      testDir: './tests/ui-tests',
+      use: {
+        defaultBrowserType: 'chromium'
+      }
+    },
+
+    // {
+    //   name: "firefox",
+    //   use: {
+    //     browserName: "firefox",
+    //     video: {
+    //       mode: "off",
+    //       size: { width: 1920, height: 1080 },
+    //     },
+    //   },
+    //   fullyParallel: true,
+    // },
+
+    // {
+    //   name: "pageObjectFullScreen",
+    //   testMatch: "usePageObjects.spec.ts",
+    //   use: {
+    //     viewport: {
+    //       width: 1920,
+    //       height: 1080,
+    //     },
+    //   },
+    // },
+
+    // {
+    //   name: "mobile",
+    //   testMatch: "**/testMobile.spec.ts",
+    //   use: {
+    //     browserName: "webkit",
+    //     ...devices["iPhone 15 Pro"],
+    //   },
+    // },
+
+    {
+      name: "api-testing",
+      testDir: './tests/api-tests',
+      dependencies: ['api-smoke-tests'],
     },
 
     {
-      name: "firefox",
-      use: {
-        browserName: "firefox",
-        video: {
-          mode: "off",
-          size: { width: 1920, height: 1080 },
-        },
-      },
-      fullyParallel: true,
-    },
-    {
-      name: "pageObjectFullScreen",
-      testMatch: "usePageObjects.spec.ts",
-      use: {
-        viewport: {
-          width: 1920,
-          height: 1080,
-        },
-      },
-    },
-    {
-      name: "mobile",
-      testMatch: "**/testMobile.spec.ts",
-      use: {
-        browserName: "webkit",
-        ...devices["iPhone 15 Pro"],
-      },
+      name: "api-smoke-tests",
+      testDir: './tests/api-tests',
+      testMatch: 'example*'
     },
   ],
+  // WebServer launches the app (only for UI)
   webServer: {
     command: "npm run start", // your dev server
     url: "http://localhost:4200",
