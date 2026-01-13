@@ -7,7 +7,7 @@ import type { TestOptions } from "./test-options";
  * https://github.com/motdotla/dotenv
  */
 dotenv.config();
-const users = JSON.parse(process.env.USERS_JSON || '{}')
+const users = JSON.parse(process.env.USERS_JSON || "{}");
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
@@ -33,7 +33,7 @@ export default defineConfig<TestOptions>({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     process.env.CI ? ["dot"] : ["list"],
-        [
+    [
       "@argos-ci/playwright/reporter",
       {
         // Upload to Argos on CI only.
@@ -84,14 +84,12 @@ export default defineConfig<TestOptions>({
   projects: [
     {
       name: "ui-tests",
-      testDir: './tests/ui-tests',
+      testDir: "./tests/ui-tests",
       use: {
-        defaultBrowserType: 'chromium'
-        ,
-        // increase action/navigation timeouts for UI tests so auto-wait doesn't fail at 5s
+        browserName: "chromium",
         actionTimeout: 20000,
-        navigationTimeout: 20000
-        }
+        navigationTimeout: 20000,
+      },
     },
 
     // {
@@ -128,14 +126,14 @@ export default defineConfig<TestOptions>({
 
     {
       name: "api-testing",
-      testDir: './tests/api-tests',
-      dependencies: ['api-smoke-tests'],
+      testDir: "./tests/api-tests",
+      dependencies: ["api-smoke-tests"],
     },
 
     {
       name: "api-smoke-tests",
-      testDir: './tests/api-tests',
-      testMatch: 'example*'
+      testDir: "./tests/api-tests",
+      testMatch: "example*",
     },
   ],
   // WebServer launches the app (only for UI)
@@ -145,5 +143,4 @@ export default defineConfig<TestOptions>({
     reuseExistingServer: true, // attach if already running
     timeout: 120_000,
   },
-  
 });
