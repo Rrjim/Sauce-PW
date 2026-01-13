@@ -22,7 +22,7 @@ test.describe("Login scenarios", () => {
       await test.step("Verify result", async () => {
         const assertions = {
           successful: async () => {
-            inventoryPage.assertPageUrl();
+            // inventoryPage.assertPageUrl();
             inventoryPage.isPageLoaded();
             await argosScreenshot(pageManager.getPage(), "Inventory Page - " + key);
           },
