@@ -2,6 +2,7 @@ import { argosScreenshot } from "@argos-ci/playwright";
 import { test } from "../../fixtures/test-options";
 import userData from "../../test-data/users.qa.json";
 import { Users } from "../../types/login";
+import { log } from "console";
 
 const users = userData as Users;
 
@@ -15,6 +16,7 @@ test.describe("Login scenarios", () => {
         process.env[userRecord.passwordKey] ?? userRecord.passwordKey;
 
       await loginPage.open();
+      await loginPage.isPageLoaded();
       await loginPage.login(userRecord.username, password);
 
       await test.step("Verify result", async () => {
