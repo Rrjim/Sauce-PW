@@ -14,11 +14,11 @@ export abstract class BasePage {
   }
 
   async isPageLoaded() {
-      await expect(this.pageReadyLocator).toBeVisible();
+    await expect(this.pageReadyLocator).toBeVisible();
   }
 
   async assertPageUrl() {
-      await expect(this.page).toHaveURL(this.url);
+    await expect(this.page).toHaveURL(this.url);
   }
 
   // --- Abstract method ---

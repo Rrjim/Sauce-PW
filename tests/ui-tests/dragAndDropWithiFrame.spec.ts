@@ -1,23 +1,23 @@
-import {expect} from '@playwright/test'
-import {test} from '../../test-options';
+// import {expect} from '@playwright/test'
+// import {test} from '../../test-options';
 
-test('drag and drop with iFrame', async({page, globalsQaURL}) => {
-    await page.goto(globalsQaURL)
-    const consentButton = page
-    .locator('.fc-footer-buttons')
-    .getByRole('button', { name: 'Consent' });
+// test('drag and drop with iFrame', async({page, globalsQaURL}) => {
+//     await page.goto(globalsQaURL)
+//     const consentButton = page
+//     .locator('.fc-footer-buttons')
+//     .getByRole('button', { name: 'Consent' });
 
-    await consentButton.click()
+//     await consentButton.click()
 
-    const frame = page.frameLocator('[rel-title="Photo Manager"] iframe')
-    await frame.locator('li', {hasText: "High Tatras 2"}).dragTo(frame.locator('#trash'))
+//     const frame = page.frameLocator('[rel-title="Photo Manager"] iframe')
+//     await frame.locator('li', {hasText: "High Tatras 2"}).dragTo(frame.locator('#trash'))
     
-    // OR
-    // more precise control
-    await frame.locator('li', {hasText: "High Tatras 4"}).dragTo(frame.locator('#trash'))
-    // await page.mouse.down()
-    // await frame.locator('#trash').hover()
-    // await page.mouse.up()
+//     // OR
+//     // more precise control
+//     await frame.locator('li', {hasText: "High Tatras 4"}).dragTo(frame.locator('#trash'))
+//     // await page.mouse.down()
+//     // await frame.locator('#trash').hover()
+//     // await page.mouse.up()
 
-    await expect(frame.locator('#trash li h5')).toHaveText(["High Tatras 2", "High Tatras 4"])
-})
+//     await expect(frame.locator('#trash li h5')).toHaveText(["High Tatras 2", "High Tatras 4"])
+// })

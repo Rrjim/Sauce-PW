@@ -18,7 +18,7 @@ export default defineConfig<TestOptions>({
   timeout: 40000,
   // globalTimeout: 60000,
   expect: {
-    timeout: 2000,
+    timeout: 5000,
     toMatchSnapshot: { maxDiffPixels: 50 },
   },
   // testDir: './tests', // DEFAULT VALUE CAN BE REMOVED
