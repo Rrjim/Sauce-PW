@@ -17,15 +17,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "pageObjects-chrome": "npx playwright test usePageObjects.spec.ts --project=chromium",
-    "pageObjects-firefox": "npx playwright test usePageObjects.spec.ts --project=firefox",
-    "pageObjects-all": "npm run pageObjects-chrome && npm run pageObjects-firefox",
-    "login-chrome": "npx playwright test login.spec.ts --project=chromium",
-    "login-firefox": "npx playwright test login.spec.ts --project=firefox",
-    "login-all": "npm run playwright test login.spec.ts --project=ui-tests",
-    "login-all:headed": "npx playwright test login.spec.ts --headed",
-    "login-all:debug": "npx playwright test login.spec.ts --debug"
 
+    "login-all": "npx playwright test login.spec.ts --project=ui-tests",
+    "login-all:headed": "npx playwright test login.spec.ts --project=ui-tests --headed",
+    "login-all:debug": "npx playwright test login.spec.ts --project=ui-tests --debug",
+
+    "pageObjects": "npx playwright test usePageObjects.spec.ts --project=ui-tests"
   },
   "dependencies": {
     "@angular/animations": "^14.2.12",
