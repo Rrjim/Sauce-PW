@@ -1,5 +1,6 @@
 import {test as base} from '@playwright/test'
 import { PageManager } from '../pw-practice-app/page-objects/pageManager'
+import { LoginPage } from './page-objects/loginPage'
 
 export type TestOptions = {
     globalsQaURL: string
@@ -37,4 +38,7 @@ export const test = base.extend<TestOptions>({
         await use(pm)
     }
 })
+
+
+
 

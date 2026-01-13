@@ -1,11 +1,13 @@
 import { defineConfig, devices } from "@playwright/test";
+import * as dotenv from "dotenv";
 import type { TestOptions } from "./test-options";
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-require("dotenv").config();
+dotenv.config();
+const users = JSON.parse(process.env.USERS_JSON || '{}')
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
@@ -56,12 +58,7 @@ export default defineConfig<TestOptions>({
     // baseURL: 'http://localhost:4200',
     globalsQaURL: "https://www.globalsqa.com/demo-site/draganddrop/",
     // baseURL is used for UI apps as well, we use api-config for API
-    baseURL:
-      process.env.DEV === "1"
-        ? "http://localhost:4201/"
-        : process.env.STAGING === "1"
-        ? "http://localhost:4202/"
-        : "http://localhost:4200/",
+    baseURL: process.env.BASE_URL,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     // trace is responsible for taking screenshots when a test fails (UI only)
     trace: "retain-on-failure",
@@ -148,4 +145,5 @@ export default defineConfig<TestOptions>({
     reuseExistingServer: true, // attach if already running
     timeout: 120_000,
   },
+  
 });

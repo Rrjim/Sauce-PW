@@ -1,31 +1,25 @@
-import { Page, expect } from "@playwright/test"
-import { NavigationPage } from "./navigationPage"
-import { FormLayoutsPage } from "./formLayoutsPage"
-import { DatepickerPage } from "./datepickerPage"
+// page-objects/pageManager.ts
+import { Page } from '@playwright/test'
+import { LoginPage } from './loginPage'
+import { InventoryPage } from './inventoryPage'
 
 export class PageManager {
+  private loginPage?: LoginPage
+  private inventoryPage?: InventoryPage
 
-    private readonly page: Page
-    private readonly navigationPage: NavigationPage
-    private readonly formLayoutsPage: FormLayoutsPage
-    private readonly datepickerPage: DatepickerPage
+  constructor(private readonly page: Page) {}
 
-    constructor(page: Page) {
-        this.page = page
-        this.navigationPage = new NavigationPage(this.page)
-        this.formLayoutsPage = new FormLayoutsPage(this.page)
-        this.datepickerPage = new DatepickerPage(this.page)
-    }
+  getPage(): Page {
+    return this.page;
+  }
 
-    navigateTo() {
-        return this.navigationPage
-    }
+  onLoginPage() {
+    if (!this.loginPage) this.loginPage = new LoginPage(this.page)
+    return this.loginPage
+  }
 
-    onFormLayoutsPage() {
-        return this.formLayoutsPage
-    }
-
-    onDatepickerPage() {
-        return this.datepickerPage
-    }
+  onInventoryPage() {
+    if (!this.inventoryPage) this.inventoryPage = new InventoryPage(this.page)
+    return this.inventoryPage
+  }
 }

@@ -21,12 +21,7 @@ export class FormLayoutsPage extends HelperBase{
         await usingTheGridForm.getByRole('button').click()
     }
 
-    /**
-     * 
-     * @param name 
-     * @param email 
-     * @param rememberMe 
-     */
+
     async submitInlineFormWithNameEmailAndCheckbox(name: string, email: string, rememberMe: boolean) {
         const inlineForm = this.page.locator('nb-card', {hasText: "Inline form"})
         await inlineForm.getByRole('textbox', {name:"Jane Doe"}).fill(email)
