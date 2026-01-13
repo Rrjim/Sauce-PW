@@ -19,7 +19,10 @@
     "start": "ng serve",
     "pageObjects-chrome": "npx playwright test usePageObjects.spec.ts --project=chromium",
     "pageObjects-firefox": "npx playwright test usePageObjects.spec.ts --project=firefox",
-    "pageObjects-all": "npm run pageObjects-chrome && npm run pageObjects-firefox"
+    "pageObjects-all": "npm run pageObjects-chrome && npm run pageObjects-firefox",
+    "login-chrome": "npx playwright test login.spec.ts --project=chromium",
+    "login-firefox": "npx playwright test login.spec.ts --project=firefox",
+    "login-all": "npm run login-chrome && npm run login-firefox"
   },
   "dependencies": {
     "@angular/animations": "^14.2.12",
