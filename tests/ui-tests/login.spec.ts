@@ -1,7 +1,8 @@
+import { argosScreenshot } from "@argos-ci/playwright";
 import { test } from "../../fixtures/test-options";
 import userData from "../../test-data/users.qa.json";
 import { Users } from "../../types/login";
-import { stepWithArgos } from "../../helpers/argos";
+import { stepWithArgos } from "../../helpers/argos"; // our fixed helper
 
 const users = userData as Users;
 
@@ -15,23 +16,27 @@ test.describe("Login scenarios", () => {
       const password =
         process.env[userRecord.passwordKey] ?? userRecord.passwordKey;
 
-      await loginPage.open();
-      await loginPage.isPageLoaded();
-      await loginPage.login(userRecord.username, password);
-
-      await stepWithArgos(
-        page,
-        `${userRecord.expect === "successful" ? "Inventory" : "Login"} Page - ${key}`,
-        async () => {
-          // Assertions inside the wrapped step
-          if (userRecord.expect === "successful") {
+      // --- login step ---
+      await stepWithArgos(page, `Login Step - ${key}`, async () => {
+        await loginPage.open();
+        await loginPage.isPageLoaded();
+        await loginPage.login(userRecord.username, password);
+      });
+      
+      // --- verification step ---
+      await stepWithArgos(page, `Verify Result - ${key}`, async () => {
+        const assertions = {
+          successful: async () => {
             await inventoryPage.assertPageUrl();
             await inventoryPage.isPageLoaded();
-          } else {
+          },
+          unsuccessful: async () => {
             await loginPage.expectError(userRecord.errorText!);
-          }
-        }
-      );
+          },
+        };
+
+        await assertions[userRecord.expect]();
+      });
     });
   }
 });
