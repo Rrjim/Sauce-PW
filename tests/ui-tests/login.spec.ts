@@ -19,6 +19,7 @@ test.describe("Login scenarios", () => {
       // --- login step ---
       await stepWithArgos(page, `Login Step - ${key}`, async () => {
         await loginPage.open();
+        await loginPage.isPageLoaded();
         await loginPage.login(userRecord.username, password);
       });
 

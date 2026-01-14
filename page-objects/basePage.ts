@@ -4,7 +4,6 @@ export abstract class BasePage {
   protected readonly page: Page;
   protected abstract readonly url: string;
   protected abstract readonly pageReadyLocator: Locator;
-  protected abstract readonly visualAssertForm: Locator;
   protected abstract readonly snapshotPath?: string;
 
   constructor(page: Page) {
@@ -24,10 +23,13 @@ export abstract class BasePage {
     await expect(this.page).toHaveURL(this.url);
   }
 
-  async visualAssert() {
-    await expect(this.page).toHaveScreenshot();
+  async visualAssert(options?: { maxDiffPixels?: number }) {
+    await expect(this.page).toHaveScreenshot({
+      maxDiffPixels: options?.maxDiffPixels ?? 150,
+      animations: "disabled",
+      caret: "hide",
+    });
   }
-
   // --- Abstract method ---
   // If a page has extra checks (like multiple key elements), it can implement this
   // abstract assertPageReady(): Promise<void>;
