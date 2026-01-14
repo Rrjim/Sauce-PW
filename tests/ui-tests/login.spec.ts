@@ -29,12 +29,12 @@ test.describe("Login scenarios", () => {
             await inventoryPage.assertPageUrl();
             await inventoryPage.isPageLoaded();
             if (userRecord.username === "visual_user") return; // skip visual check for visual_user
-            await inventoryPage.visualAssert(key);
+            await inventoryPage.visualAssert();
             // await page.screenshot({ path: `screenshots/Inventory Page - ${key}.png`, fullPage: true });
           },
           unsuccessful: async () => {
             await loginPage.expectError(userRecord.errorText!);
-            await loginPage.visualAssert(key);
+            await loginPage.visualAssert();
             // await page.screenshot({ path: `screenshots/Login Error - ${key}.png`, fullPage: true });
           },
         };

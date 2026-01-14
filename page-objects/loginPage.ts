@@ -12,6 +12,7 @@ export class LoginPage extends BasePage {
   readonly passwordInput = this.page.locator('[data-test="password"]');
   readonly loginButton = this.page.locator('[data-test="login-button"]');
   readonly errorMessage = this.page.locator('[data-test="error"]');
+  readonly visualAssertForm = this.page.locator('#login_button_container');
 
 
   async login(username: string, password: string) {

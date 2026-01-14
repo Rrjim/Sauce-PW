@@ -79,6 +79,7 @@ export default defineConfig<TestOptions>({
       mode: "off",
       size: { width: 1920, height: 1080 },
     },
+    // viewport: { width: 1920, height: 1080 },
     
   },
 
@@ -91,6 +92,7 @@ export default defineConfig<TestOptions>({
         browserName: "chromium",
         actionTimeout: 10000,
         navigationTimeout: 10000,
+        viewport: { width: 1920, height: 1080 },
       },
     },
 

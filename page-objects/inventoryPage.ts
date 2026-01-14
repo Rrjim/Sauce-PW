@@ -8,5 +8,6 @@ export class InventoryPage extends BasePage {
   protected readonly url = urls.inventory;
   protected readonly pageReadyLocator = this.page.locator('.inventory_list');
   protected readonly snapshotPath = 'screenshots/Inventory Page';
+  readonly visualAssertForm = this.page.locator('.inventory_list');
 }
 
