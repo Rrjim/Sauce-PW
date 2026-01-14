@@ -36,7 +36,7 @@ export default defineConfig<TestOptions>({
     [
       "@argos-ci/playwright/reporter",
       {
-        // Upload to Argos on CI only.
+        // Upload to Argos on CI only./
         uploadToArgos: !!process.env.CI,
 
         // Set your Argos token (required if not using GitHub Actions).
