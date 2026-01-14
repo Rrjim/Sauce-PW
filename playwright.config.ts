@@ -93,9 +93,19 @@ export default defineConfig<TestOptions>({
         actionTimeout: 10000,
         navigationTimeout: 10000,
         viewport: { width: 1920, height: 1080 },
+        deviceScaleFactor: 1,
+        launchOptions: {
+          args: [
+            "--disable-font-subpixel-positioning",
+            "--disable-lcd-text",
+          ],
+        },
       },
-    },
+      
+  
+},
 
+  
     // {
     //   name: "firefox",
     //   use: {
