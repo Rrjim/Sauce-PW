@@ -88,8 +88,8 @@ export default defineConfig<TestOptions>({
       testDir: "./tests/ui-tests",
       use: {
         browserName: "chromium",
-        actionTimeout: 20000,
-        navigationTimeout: 20000,
+        actionTimeout: 5000,
+        navigationTimeout: 10000,
       },
     },
 

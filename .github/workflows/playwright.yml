@@ -1,27 +1,36 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      BASE_URL: ${{ secrets.BASE_URL }}
+      STANDARD_USER_PASSWORD: ${{ secrets.STANDARD_USER_PASSWORD }}
+      LOCKED_OUT_USER_PASSWORD: ${{ secrets.LOCKED_OUT_USER_PASSWORD }}
+      PROBLEM_USER_PASSWORD: ${{ secrets.PROBLEM_USER_PASSWORD }}
+      PERFORMANCE_GLITCH_USER_PASSWORD: ${{ secrets.PERFORMANCE_GLITCH_USER_PASSWORD }}
+      ERROR_USER_PASSWORD: ${{ secrets.ERROR_USER_PASSWORD }}
+      VISUAL_USER_PASSWORD: ${{ secrets.VISUAL_USER_PASSWORD }}
+      ARGOS_TOKEN: ${{ secrets.ARGOS_TOKEN }}
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci --force
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps --force
-    - name: Run UI tests
-      run: npm run login-all
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci --force
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps --force
+      - name: Run UI tests
+        run: npm run login-all
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
