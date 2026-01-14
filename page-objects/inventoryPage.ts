@@ -6,6 +6,6 @@ import urls from "../test-data/urls.qa.json";
 export class InventoryPage extends BasePage {
 
   protected readonly url = urls.inventory;
-  protected readonly pageReadyLocator = this.page.locator('.inventory_list');
+  protected readonly pageReadyLocator = this.page.locator('.inventory_lst');
 }
 

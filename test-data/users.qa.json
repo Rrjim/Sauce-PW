@@ -1,6 +1,6 @@
 {
   "standard_user": {
-    "username": "standar_user",
+    "username": "standard_user",
     "passwordKey": "STANDARD_USER_PASSWORD",
     "expect": "successful"
   },
