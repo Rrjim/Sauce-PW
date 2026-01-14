@@ -18,7 +18,7 @@
     "ng": "ng",
     "start": "ng serve",
 
-    "login-all": "npx playwright test login.spec.ts --project=ui-tests",
+    "login-all": "npx playwright test login.spec.ts --project=ui-tests --update-snapshots",
     "login-all:headed": "npx playwright test login.spec.ts --project=ui-tests --headed",
     "login-all:debug": "npx playwright test login.spec.ts --project=ui-tests --debug",
 
