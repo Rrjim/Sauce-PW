@@ -19,19 +19,23 @@ test.describe("Login scenarios", () => {
       // --- login step ---
       await stepWithArgos(page, `Login Step - ${key}`, async () => {
         await loginPage.open();
-        await loginPage.isPageLoaded();
         await loginPage.login(userRecord.username, password);
       });
-      
+
       // --- verification step ---
       await stepWithArgos(page, `Verify Result - ${key}`, async () => {
         const assertions = {
           successful: async () => {
             await inventoryPage.assertPageUrl();
             await inventoryPage.isPageLoaded();
+            if (userRecord.username === "visual_user") return; // skip visual check for visual_user
+            await inventoryPage.visualAssert(key);
+            // await page.screenshot({ path: `screenshots/Inventory Page - ${key}.png`, fullPage: true });
           },
           unsuccessful: async () => {
             await loginPage.expectError(userRecord.errorText!);
+            await loginPage.visualAssert(key);
+            // await page.screenshot({ path: `screenshots/Login Error - ${key}.png`, fullPage: true });
           },
         };
 
