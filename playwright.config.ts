@@ -40,7 +40,8 @@ export default defineConfig<TestOptions>({
         uploadToArgos: !!process.env.CI,
 
         // Set your Argos token (required if not using GitHub Actions).
-        token: "argos_58135200b428e985d216e1daccf196853f",
+        token: process.env.ARGOS_TOKEN,
+
       },
     ],
     ["json", { outputFile: "test-results/jsonReport.json" }],
@@ -72,8 +73,8 @@ export default defineConfig<TestOptions>({
     //   username: '',
     //   password: ''
     // }
-    actionTimeout: 5000,
-    navigationTimeout: 5000,
+    actionTimeout: 10000,
+    navigationTimeout: 15000,
     video: {
       mode: "off",
       size: { width: 1920, height: 1080 },
@@ -136,11 +137,11 @@ export default defineConfig<TestOptions>({
       testMatch: "example*",
     },
   ],
-  // WebServer launches the app (only for UI)
-  webServer: {
-    command: "npm run start", // your dev server
-    url: "http://localhost:4200",
-    reuseExistingServer: true, // attach if already running
-    timeout: 120_000,
-  },
+  // // WebServer launches the app (only for UI)
+  // webServer: {
+  //   command: "npm run start", // your dev server
+  //   url: "http://localhost:4200",
+  //   reuseExistingServer: true, // attach if already running
+  //   timeout: 120_000,
+  // },
 });

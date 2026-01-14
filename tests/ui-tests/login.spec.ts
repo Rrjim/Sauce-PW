@@ -2,7 +2,6 @@ import { argosScreenshot } from "@argos-ci/playwright";
 import { test } from "../../fixtures/test-options";
 import userData from "../../test-data/users.qa.json";
 import { Users } from "../../types/login";
-import { log } from "console";
 
 const users = userData as Users;
 
