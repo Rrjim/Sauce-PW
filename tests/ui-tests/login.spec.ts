@@ -2,7 +2,6 @@ import { argosScreenshot } from "@argos-ci/playwright";
 import { test } from "../../fixtures/test-options";
 import userData from "../../test-data/users.qa.json";
 import { Users } from "../../types/login";
-import { stepWithArgos } from "../../helpers/argos"; // our fixed helper
 
 const users = userData as Users;
 
@@ -17,25 +16,26 @@ test.describe("Login scenarios", () => {
         process.env[userRecord.passwordKey] ?? userRecord.passwordKey;
 
       // --- login step ---
-      await loginPage.open();
-      await loginPage.isPageLoaded();
-      await loginPage.login(userRecord.username, password);
+        await loginPage.open();
+        await loginPage.isPageLoaded();
+        await loginPage.login(userRecord.username, password);
 
       // --- verification step ---
-      const assertions = {
-        successful: async () => {
-          await inventoryPage.assertPageUrl();
-          await inventoryPage.isPageLoaded();
-          if (userRecord.username === "visual_user") return; // skip visual check for visual_user
-          // await inventoryPage.visualAssert(`inventory-page-${key}.png`);
-        },
-        unsuccessful: async () => {
-          await loginPage.expectError(userRecord.errorText!);
-          // await loginPage.visualAssert(`login-error-${key}.png`);
-        },
-      };
-
-      await assertions[userRecord.expect]();
+        const assertions = {
+          successful: async () => {
+            await inventoryPage.assertPageUrl();
+            await inventoryPage.isPageLoaded();
+            if (userRecord.username === "visual_user") return; // skip visual check for visual_user
+            // await inventoryPage.visualAssert(`Login Scenarios - ${key}`);
+            argosScreenshot(page, `Login Scenarios - ${key}`);
+          },
+          unsuccessful: async () => {
+            await loginPage.expectError(userRecord.errorText!);
+            // await loginPage.visualAssert(`Login Scenarios - ${key}`);
+            argosScreenshot(page, `Login Scenarios - ${key}`);
+          },
+        };
+        await assertions[userRecord.expect]();
     });
   }
 });
