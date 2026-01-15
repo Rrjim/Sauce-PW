@@ -17,31 +17,27 @@ test.describe("Login scenarios", () => {
         process.env[userRecord.passwordKey] ?? userRecord.passwordKey;
 
       // --- login step ---
-      await stepWithArgos(page, `Login Step - ${key}`, async () => {
-        await loginPage.open();
-        await loginPage.isPageLoaded();
-        await loginPage.login(userRecord.username, password);
-      });
+      await loginPage.open();
+      await loginPage.isPageLoaded();
+      await loginPage.login(userRecord.username, password);
 
       // --- verification step ---
-      await stepWithArgos(page, `Verify Result - ${key}`, async () => {
-        const assertions = {
-          successful: async () => {
-            await inventoryPage.assertPageUrl();
-            await inventoryPage.isPageLoaded();
-            if (userRecord.username === "visual_user") return; // skip visual check for visual_user
-            await inventoryPage.visualAssert();
-            // await page.screenshot({ path: `screenshots/Inventory Page - ${key}.png`, fullPage: true });
-          },
-          unsuccessful: async () => {
-            await loginPage.expectError(userRecord.errorText!);
-            await loginPage.visualAssert();
-            // await page.screenshot({ path: `screenshots/Login Error - ${key}.png`, fullPage: true });
-          },
-        };
+      const assertions = {
+        successful: async () => {
+          await inventoryPage.assertPageUrl();
+          await inventoryPage.isPageLoaded();
+          if (userRecord.username === "visual_user") return; // skip visual check for visual_user
+          await inventoryPage.visualAssert(`inventory-page-${key}.png`);
+          // await page.screenshot({ path: `screenshots/Inventory Page - ${key}.png`, fullPage: true });
+        },
+        unsuccessful: async () => {
+          await loginPage.expectError(userRecord.errorText!);
+          await loginPage.visualAssert(`login-error-${key}.png`);
+          // await page.screenshot({ path: `screenshots/Login Error - ${key}.png`, fullPage: true });
+        },
+      };
 
-        await assertions[userRecord.expect]();
-      });
+      await assertions[userRecord.expect]();
     });
   }
 });

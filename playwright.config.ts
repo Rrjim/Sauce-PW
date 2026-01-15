@@ -15,6 +15,8 @@ const users = JSON.parse(process.env.USERS_JSON || "{}");
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig<TestOptions>({
+  snapshotPathTemplate:
+  "{testDir}/__screenshots__/{testFilePath}/{arg}{ext}",
   timeout: 40000,
   // globalTimeout: 60000,
   expect: {

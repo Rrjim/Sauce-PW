@@ -23,13 +23,23 @@ export abstract class BasePage {
     await expect(this.page).toHaveURL(this.url);
   }
 
-  async visualAssert(options?: { maxDiffPixels?: number }) {
-    await expect(this.page).toHaveScreenshot({
+  /**
+   * Overwrite to provide custom snapshot name/path
+   * @param snapshotName 
+   * @param options 
+   *
+   */
+  async visualAssert(
+    snapshotName: string,
+    options?: { maxDiffPixels?: number }
+  ) {
+    await expect(this.page).toHaveScreenshot(snapshotName, {
       maxDiffPixels: options?.maxDiffPixels ?? 150,
       animations: "disabled",
       caret: "hide",
     });
   }
+
   // --- Abstract method ---
   // If a page has extra checks (like multiple key elements), it can implement this
   // abstract assertPageReady(): Promise<void>;
