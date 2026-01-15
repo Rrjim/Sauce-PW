@@ -27,12 +27,12 @@ test.describe("Login scenarios", () => {
             await inventoryPage.isPageLoaded();
             if (userRecord.username === "visual_user") return; // skip visual check for visual_user
             // await inventoryPage.visualAssert(`Login Scenarios - ${key}`);
-            argosScreenshot(page, `Login Scenarios - ${key}`);
+            await argosScreenshot(page, `Login Scenarios - ${key}`);
           },
           unsuccessful: async () => {
             await loginPage.expectError(userRecord.errorText!);
             // await loginPage.visualAssert(`Login Scenarios - ${key}`);
-            argosScreenshot(page, `Login Scenarios - ${key}`);
+            await argosScreenshot(page, `Login Scenarios - ${key}`);
           },
         };
         await assertions[userRecord.expect]();
