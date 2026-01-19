@@ -1,13 +1,92 @@
 // page-objects/inventoryPage.ts
 import { BasePage } from "./basePage";
-import { expect, Locator, Page } from "@playwright/test";
-import urls from "../test-data/urls.qa.json";
+import { InventoryItem } from "./inventoryItemPage";
+import { Locator, Page, expect } from "@playwright/test";
+import urls from "../test-data/url/urls.qa.json";
+import type { InventoryItemData } from "../types/inventoryItemData";
+import { SortKey } from "../types/inventory-item";
+import { User } from "../types/login";
+import { writeInventoryDataToFile } from "../helpers/general";
 
 export class InventoryPage extends BasePage {
+  url = urls.inventory;
+  pageReadyLocator = this.page.locator(
+    "[data-test='title']"
+  );
+  readonly inventoryItems: Locator;
+  readonly shoppingCartBadge = this.page.locator(
+    "[data-test='shopping-cart-badge']"
+  );
+  readonly shoppingCartLink = this.page.locator(".shopping_cart_link");
+  readonly sortSelect = this.page.locator(
+    "[data-test='product-sort-container']"
+  );
+  readonly burgerMenuButton = this.page.getByRole("button", {
+    name: "Open Menu",
+  });
 
-  protected readonly url = urls.inventory;
-  protected readonly pageReadyLocator = this.page.locator('.inventory_list');
-  protected readonly snapshotPath = 'screenshots/Inventory Page';
-  readonly visualAssertForm = this.page.locator('.inventory_list');
+  constructor(page: Page) {
+    super(page);
+    this.inventoryItems = this.page.locator(".inventory_item");
+  }
+
+  // --- UI DATA EXTRACTION ---
+
+  async getItems(): Promise<InventoryItem[]> {
+    const count = await this.inventoryItems.count();
+    return Array.from(
+      { length: count },
+      (_, i) => new InventoryItem(this.inventoryItems.nth(i))
+    );
+  }
+
+  async getInventoryData(): Promise<InventoryItemData[]> {
+    const items = await this.getItems();
+    return Promise.all(items.map((item) => item.getData()));
+  }
+
+  // --- HIGH-LEVEL ACTIONS ---
+
+  async generateInventoryDatasetByUser(key: string) {
+    const data = await this.getInventoryData();
+    writeInventoryDataToFile(key,"inventory", data);
+  }
+
+  async selectSort(option: SortKey, user: User): Promise<void> {
+    if (user.capabilities.sort.alertsOnSort) {
+      this.page.once("dialog", async (dialog) => {
+        await dialog.accept();
+      });
+    }
+
+    await this.sortSelect.selectOption(option);
+  }
+
+  async getItemByTitle(title: string): Promise<InventoryItem> {
+    const locator = this.inventoryItems.filter({ hasText: title }).first();
+
+    await expect(
+      locator,
+      `Inventory item with title "${title}" not found`
+    ).toBeVisible();
+
+    return new InventoryItem(locator);
+  }
+
+  async addItemToCart(title: string): Promise<void> {
+    const item = await this.getItemByTitle(title);
+    await item.addToCart();
+  }
+
+  async removeItemFromCart(title: string): Promise<void> {
+    const item = await this.getItemByTitle(title);
+    await item.removeFromCart();
+  }
+
+  async getCartBadgeCount(): Promise<number> {
+    if (!(await this.shoppingCartBadge.isVisible())) {
+      return 0;
+    }
+    return Number(await this.shoppingCartBadge.textContent());
+  }
 }
-

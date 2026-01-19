@@ -1,9 +1,9 @@
 import { argosScreenshot } from "@argos-ci/playwright";
 import { test } from "../../fixtures/test-options";
-import userData from "../../test-data/users.qa.json";
-import { Users } from "../../types/login";
+import userData from "../../test-data/user/users.qa.json";
+import { UserMap } from "../../types/login";
 
-const users = userData as Users;
+const users = userData as UserMap;
 
 test.describe("Login scenarios", () => {
   for (const [key, userRecord] of Object.entries(users)) {
@@ -16,26 +16,28 @@ test.describe("Login scenarios", () => {
         process.env[userRecord.passwordKey] ?? userRecord.passwordKey;
 
       // --- login step ---
-        await loginPage.open();
-        await loginPage.isPageLoaded();
-        await loginPage.login(userRecord.username, password);
+      await loginPage.open();
+      await loginPage.isPageLoaded();
+      await loginPage.login(userRecord.username, password);
 
       // --- verification step ---
-        const assertions = {
-          successful: async () => {
-            await inventoryPage.assertPageUrl();
-            await inventoryPage.isPageLoaded();
-            if (userRecord.username === "visual_user") return; // skip visual check for visual_user
-            // await inventoryPage.visualAssert(`Login Scenarios - ${key}`);
-            await argosScreenshot(page, `Login Scenarios - ${key}`);
-          },
-          unsuccessful: async () => {
-            await loginPage.expectError(userRecord.errorText!);
-            // await loginPage.visualAssert(`Login Scenarios - ${key}`);
-            await argosScreenshot(page, `Login Scenarios - ${key}`);
-          },
-        };
-        await assertions[userRecord.expect]();
+      const assertions = {
+        successful: async () => {
+          await inventoryPage.assertPageUrl();
+          await inventoryPage.isPageLoaded();
+          // if (userRecord.username === "visual_user") return; // skip visual check for visual_user
+          // await inventoryPage.visualAssert(`Login Scenarios - ${key}`);
+          await inventoryPage.generateInventoryDatasetByUser(key);
+
+          await argosScreenshot(page, `Login Scenarios - ${key}`);
+        },
+        unsuccessful: async () => {
+          await loginPage.expectError(userRecord.errorText!);
+          // await loginPage.visualAssert(`Login Scenarios - ${key}`);
+          await argosScreenshot(page, `Login Scenarios - ${key}`);
+        },
+      };
+      await assertions[userRecord.expect]();
     });
   }
 });

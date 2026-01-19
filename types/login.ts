@@ -11,16 +11,17 @@ export type LoginResult =
     string
   > 
 
-export type UserConfig = {
+export type User = {
   username: string
   passwordKey: string
   expect: string
   errorText?: string
+  capabilities?: UserCapabilities
 } 
 
 
-export type Users = Record<string, UserConfig>
-export type UserKey = keyof Users & string
+export type UserMap = Record<string, User>
+export type UserKey = keyof UserMap & string
 
 // --- Fixture types ---
 export type LoginAsFixture = {
@@ -35,3 +36,20 @@ export interface PageManagerType {
 }
 
 
+export interface SortCapabilities {
+  sortWorks: boolean;
+  priceAccurate?: boolean;
+  alertsOnSort?: boolean;
+}
+
+export interface CartCapabilities {
+  addWorks: boolean;
+  removeWorks: boolean;
+  badgeAccurate: boolean;
+  limitedItems?: string[]; // titles that work
+}
+
+export interface UserCapabilities {
+  sort: SortCapabilities;
+  cart: CartCapabilities;
+}

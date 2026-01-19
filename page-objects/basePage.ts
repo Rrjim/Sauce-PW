@@ -4,7 +4,6 @@ export abstract class BasePage {
   protected readonly page: Page;
   protected abstract readonly url: string;
   protected abstract readonly pageReadyLocator: Locator;
-  protected abstract readonly snapshotPath?: string;
 
   constructor(page: Page) {
     this.page = page;
