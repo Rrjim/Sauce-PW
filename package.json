@@ -21,6 +21,8 @@
     "login-all": "npx playwright test login.spec.ts --project=ui-tests",
     "login-all:headed": "npx playwright test login.spec.ts --project=ui-tests --headed",
     "login-all:debug": "npx playwright test login.spec.ts --project=ui-tests --debug",
+    "ui-all": "npx playwright test tests/ui-tests"
+,
 
     "pageObjects": "npx playwright test usePageObjects.spec.ts --project=ui-tests"
   },

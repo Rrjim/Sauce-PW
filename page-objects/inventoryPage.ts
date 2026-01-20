@@ -10,9 +10,7 @@ import { writeInventoryDataToFile } from "../helpers/general";
 
 export class InventoryPage extends BasePage {
   url = urls.inventory;
-  pageReadyLocator = this.page.locator(
-    "[data-test='title']"
-  );
+  pageReadyLocator = this.page.locator("[data-test='title']");
   readonly inventoryItems: Locator;
   readonly shoppingCartBadge = this.page.locator(
     "[data-test='shopping-cart-badge']"
@@ -40,16 +38,18 @@ export class InventoryPage extends BasePage {
     );
   }
 
-  async getInventoryData(): Promise<InventoryItemData[]> {
+  async getInventoryData(): Promise<Record<string, InventoryItemData>> {
     const items = await this.getItems();
-    return Promise.all(items.map((item) => item.getData()));
+    const data = await Promise.all(items.map((item) => item.getData()));
+
+    return Object.fromEntries(data.map((item) => [item.title.trim(), item]));
   }
 
   // --- HIGH-LEVEL ACTIONS ---
 
   async generateInventoryDatasetByUser(key: string) {
     const data = await this.getInventoryData();
-    writeInventoryDataToFile(key,"inventory", data);
+    writeInventoryDataToFile(key, "inventory", data);
   }
 
   async selectSort(option: SortKey, user: User): Promise<void> {
@@ -65,10 +65,7 @@ export class InventoryPage extends BasePage {
   async getItemByTitle(title: string): Promise<InventoryItem> {
     const locator = this.inventoryItems.filter({ hasText: title }).first();
 
-    await expect(
-      locator,
-      `Inventory item with title "${title}" not found`
-    ).toBeVisible();
+    await expect(locator, `Inventory item "${title}" is visible`).toBeVisible();
 
     return new InventoryItem(locator);
   }

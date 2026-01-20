@@ -1,0 +1,7 @@
+[Sorting] Sort: default | user=problem_user
+Expected order: []
+Actual order:   []
+[Sorting] Skipping az for user=problem_user (capability limit)
+[Sorting] Skipping za for user=problem_user (capability limit)
+[Sorting] Skipping lohi for user=problem_user (capability limit)
+[Sorting] Skipping hilo for user=problem_user (capability limit)

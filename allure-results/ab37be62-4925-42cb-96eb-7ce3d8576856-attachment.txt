@@ -1,0 +1,43 @@
+[Sorting] Sort: default | user=problem_user
+Expected order: []
+Actual order:   []
+[Sorting] Sort: az | user=problem_user
+Expected order: [
+  'Sauce Labs Backpack',
+  'Sauce Labs Bike Light',
+  'Sauce Labs Bolt T-Shirt',
+  'Sauce Labs Fleece Jacket',
+  'Sauce Labs Onesie',
+  'Test.allTheThings() T-Shirt (Red)'
+]
+Actual order:   [
+  'Sauce Labs Backpack',
+  'Sauce Labs Bike Light',
+  'Sauce Labs Bolt T-Shirt',
+  'Sauce Labs Fleece Jacket',
+  'Sauce Labs Onesie',
+  'Test.allTheThings() T-Shirt (Red)'
+]
+[Sorting] Sort: za | user=problem_user
+Expected order: [
+  'Sauce Labs Backpack',
+  'Sauce Labs Bike Light',
+  'Sauce Labs Bolt T-Shirt',
+  'Sauce Labs Fleece Jacket',
+  'Sauce Labs Onesie',
+  'Test.allTheThings() T-Shirt (Red)'
+]
+Actual order:   [
+  'Sauce Labs Backpack',
+  'Sauce Labs Bike Light',
+  'Sauce Labs Bolt T-Shirt',
+  'Sauce Labs Fleece Jacket',
+  'Sauce Labs Onesie',
+  'Test.allTheThings() T-Shirt (Red)'
+]
+[Sorting] Sort: lohi | user=problem_user
+Expected order: [ 29.99, 9.99, 15.99, 49.99, 7.99, 15.99 ]
+Actual order:   [ 29.99, 9.99, 15.99, 49.99, 7.99, 15.99 ]
+[Sorting] Sort: hilo | user=problem_user
+Expected order: [ 29.99, 9.99, 15.99, 49.99, 7.99, 15.99 ]
+Actual order:   [ 29.99, 9.99, 15.99, 49.99, 7.99, 15.99 ]

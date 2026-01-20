@@ -2,8 +2,9 @@
 import { expect } from "@playwright/test";
 import { InventoryPage } from "../page-objects/inventoryPage";
 import {
-  CartAction,
+  AssertionContext,
   InventoryItemData,
+  ItemAssertion,
   SortByOption,
   SortKey,
   sortMapping,
@@ -15,114 +16,194 @@ import {
   assertDescription,
   assertImgSrc,
   assertBtnText,
+  assertTitle,
 } from "./inventory-assertions";
-import { compareInventories } from "./compare-inventories";
 
 /** --- Data Utilities --- **/
 
-const normalizeItem = (item: InventoryItemData): InventoryItemData => ({
-  ...item,
-  title: item.title.trim(),
-  description: item.description.trim(),
-  price: item.price.replace("$", "").trim(),
-});
+export function normalizeInventoryRecord(
+  record: Record<string, InventoryItemData>
+): Record<string, InventoryItemData> {
+  return Object.fromEntries(
+    Object.entries(record).map(([title, item]) => [
+      title.trim(),
+      {
+        ...item,
+        title: item.title.trim(),
+        description: item.description.trim(),
+        price: item.price.replace("$", "").trim(),
+      },
+    ])
+  );
+}
 
-export const toItemMap = (
-  items: InventoryItemData[]
-): Map<string, InventoryItemData> =>
-  new Map(items.map((item) => [item.title, normalizeItem(item)]));
 
 /**
  * Returns items to test for cart actions.
  * Respects user capability limits if any.
  */
 export const getCartTestItems = (
-  allItems: InventoryItemData[],
+  allItems: Record<string, InventoryItemData>,
   cartCaps: CartCapabilities
 ): string[] =>
   cartCaps.limitedItems?.length
     ? cartCaps.limitedItems
-    : allItems.map((i) => i.title);
+    : Object.values(allItems).map(i => i.title.trim());
 
-/**
- * Returns the expected sorted inventory, user-capabilities aware.
- */
-export const getExpectedSortedData = (
-  items: InventoryItemData[],
-  sort: SortByOption | null,
-  sortWorks: boolean
-): InventoryItemData[] => {
-  if (!sort || !sortWorks) {
-    return items;
+function shouldValidateSort(
+  sortKey: SortKey,
+  user: User
+): boolean {
+  const option = sortMapping[sortKey];
+
+  if (!option) return true; // default
+
+  if (!user.capabilities.sort?.sortWorks) {
+    return false;
   }
 
-  return [...items].sort((a, b) => {
-    let aVal: string | number = a[sort.field];
-    let bVal: string | number = b[sort.field];
+  if (
+    option.field === "price" &&
+    !user.capabilities.sort?.priceAccurate
+  ) {
+    return false;
+  }
 
-    if (sort.field === "price") {
-      aVal = parseFloat(aVal);
-      bVal = parseFloat(bVal);
-    }
+  return true;
+}
 
-    if (aVal < bVal) return sort.descending ? 1 : -1;
-    if (aVal > bVal) return sort.descending ? -1 : 1;
-    return 0;
-  });
-};
+function projectField(
+  record: Record<string, InventoryItemData>,
+  field: "title" | "price"
+): (string | number)[] {
+  const items = Object.values(record);
+
+  return field === "price"
+    ? items.map(i => Number(i.price))
+    : items.map(i => i.title);
+}
+
+
+export function projectForSort(
+  record: Record<string, InventoryItemData>,
+  sortKey: SortKey
+): (string | number)[] {
+  const items = Object.values(normalizeInventoryRecord(record));
+
+  switch (sortKey) {
+    case "az":
+    case "za":
+      return items.map(i => i.title);
+
+    case "lohi":
+    case "hilo":
+      return items.map(i => Number(i.price));
+
+    default:
+      return [];
+  }
+}
+
+function getExpectedSortOrder(
+  baseline: Record<string, InventoryItemData>,
+  sortKey: SortKey
+): (string | number)[] {
+  const option = sortMapping[sortKey];
+  if (!option) return Object.values(baseline).map(i => i.title);
+
+  const projected = projectField(baseline, option.field);
+
+  const sorted = [...projected].sort((a, b) =>
+    a < b ? -1 : a > b ? 1 : 0
+  );
+
+  return option.descending ? sorted.reverse() : sorted;
+}
+
 
 
 /** --- Validation Helpers --- **/
 
+export function validateInventoryIntegrity(
+  actual: Record<string, InventoryItemData>,
+  expected: Record<string, InventoryItemData>,
+  user: User,
+  context: Omit<AssertionContext, "item">
+) {
+  const actualNorm = normalizeInventoryRecord(actual);
+  const expectedNorm = normalizeInventoryRecord(expected);
+
+  const actualKeys = Object.keys(actualNorm);
+  const expectedKeys = Object.keys(expectedNorm);
+
+  expect(
+    actualKeys,
+    `[Inventory] Item set for | user=${context.user} \n Actual: ${actualKeys} | \n Expected: ${expectedKeys} |`
+  ).toEqual(expectedKeys);
+
+  // 2️⃣ Field-level assertions
+  for (const title of expectedKeys) {
+    const actualItem = actualNorm[title];
+    const expectedItem = expectedNorm[title];
+
+    const itemCtx: AssertionContext = {
+      ...context,
+      item: title,
+    };
+
+    assertTitle(actualItem, expectedItem, itemCtx);
+    assertPrice(actualItem, expectedItem, itemCtx, user);
+    assertDescription(actualItem, expectedItem, itemCtx);
+    assertImgSrc(actualItem, expectedItem, itemCtx);
+    assertBtnText(actualItem, expectedItem, itemCtx);
+  }
+}
+
+
 /**
  * Validates sorting behavior for a user.
+ */
+/**
+ * Returns the expected sorted inventory, user-capabilities aware.
  */
 export async function validateInventorySorting(
   inventoryPage: InventoryPage,
   user: User,
   key: string
 ) {
-  const baseline = readInventoryDataFromFile(key, "inventory");
-
-  const assertions = [
-    assertPrice,
-    assertDescription,
-    assertImgSrc,
-    assertBtnText,
-  ];
-
-for (const sortKey of Object.keys(sortMapping) as SortKey[]) {
-  if (sortKey !== "default") {
-    await inventoryPage.selectSort(sortKey, user);
-  }
-
-  const actualData = await inventoryPage.getInventoryData();
-
-  // Default sort should ignore sort bugs entirely
-  if (
-    sortKey !== "default" &&
-    !user.capabilities.sort?.priceAccurate &&
-    sortKey !== "az"
-  ) {
-    continue;
-  }
-
-  const expectedData = getExpectedSortedData(
-    baseline,
-    sortMapping[sortKey],
-    !!user.capabilities.sort?.sortWorks
+  const baseline = normalizeInventoryRecord(
+    readInventoryDataFromFile(key, "inventory")
   );
 
-  compareInventories(
-    actualData,
-    expectedData,
-    user,
-    `Sort "${sortKey}" failed (user=${key})`,
-    assertions
-  );
+  for (const sortKey of Object.keys(sortMapping) as SortKey[]) {
+    if (!shouldValidateSort(sortKey, user)) {
+      continue;
+    }
+
+    if (sortKey !== "default") {
+      await inventoryPage.selectSort(sortKey, user);
+    }
+
+    const actual = normalizeInventoryRecord(
+      await inventoryPage.getInventoryData()
+    );
+
+    const option = sortMapping[sortKey];
+
+    const actualOrder = option
+      ? projectField(actual, option.field)
+      : Object.values(actual).map(i => i.title);
+
+    const expectedOrder = getExpectedSortOrder(
+      baseline,
+      sortKey
+    );
+
+    expect(
+      actualOrder,
+      `[Sorting] Sort: ${sortKey} | user=${key}\n` +
+      `Expected: ${expectedOrder}\n` +
+      `Actual:   ${actualOrder}`
+    ).toEqual(expectedOrder);
+  }
 }
-
-}
-
-
-

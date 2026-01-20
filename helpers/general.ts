@@ -8,14 +8,14 @@ function getFilePath(key: string, from: string): string {
   return path.join(process.cwd(), "test-data", from, `${key}.json`);
 }
 
-export function writeInventoryDataToFile(key: string, from, data: Array<any>) {
+export function writeInventoryDataToFile(key: string, from, data: Record<string, InventoryItemData>) {
   fs.writeFileSync(
     getFilePath(key, from),
     JSON.stringify(data, null, 2)
   );
 }
 
-export function readInventoryDataFromFile(key: string, from: string): InventoryItemData[] {
+export function readInventoryDataFromFile(key: string, from: string): Record<string, InventoryItemData> {
   const filePath = getFilePath(key, from);
   if (!fs.existsSync(filePath)) {
     throw new Error(`Inventory data file not found: ${filePath}`);

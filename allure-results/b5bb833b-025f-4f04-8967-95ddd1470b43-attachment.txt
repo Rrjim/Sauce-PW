@@ -1,0 +1,48 @@
+Expected : Sauce Labs Backpack
+Actual for: Sauce Labs Backpack
+Expected : 37.35
+Actual for: 23.55
+Expected : Sauce Labs Bike Light
+Actual for: Sauce Labs Bike Light
+Expected : 26.95
+Actual for: 27.12
+Expected : Sauce Labs Bolt T-Shirt
+Actual for: Sauce Labs Bolt T-Shirt
+Expected : 26.1
+Actual for: 28.48
+Expected : Sauce Labs Fleece Jacket
+Actual for: Sauce Labs Fleece Jacket
+Expected : 50.42
+Actual for: 42.85
+Expected : Sauce Labs Onesie
+Actual for: Sauce Labs Onesie
+Expected : 50.33
+Actual for: 62.48
+Expected : Test.allTheThings() T-Shirt (Red)
+Actual for: Test.allTheThings() T-Shirt (Red)
+Expected : 47.01
+Actual for: 97.71
+Expected : Sauce Labs Backpack
+Actual for: Sauce Labs Backpack
+Expected : 37.35
+Actual for: 82.95
+Expected : Sauce Labs Bike Light
+Actual for: Sauce Labs Bike Light
+Expected : 26.95
+Actual for: 6.58
+Expected : Sauce Labs Bolt T-Shirt
+Actual for: Sauce Labs Bolt T-Shirt
+Expected : 26.1
+Actual for: 26.27
+Expected : Sauce Labs Fleece Jacket
+Actual for: Sauce Labs Fleece Jacket
+Expected : 50.42
+Actual for: 36.3
+Expected : Sauce Labs Onesie
+Actual for: Sauce Labs Onesie
+Expected : 50.33
+Actual for: 92.21
+Expected : Test.allTheThings() T-Shirt (Red)
+Actual for: Test.allTheThings() T-Shirt (Red)
+Expected : 47.01
+Actual for: 43.38

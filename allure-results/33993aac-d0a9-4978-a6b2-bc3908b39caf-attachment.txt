@@ -1,0 +1,43 @@
+[Sorting] Sort: default | user=performance_glitch_user
+Expected: []
+Actual:   []
+[Sorting] Sort: az | user=performance_glitch_user
+Expected: [
+  'Sauce Labs Backpack',
+  'Sauce Labs Bike Light',
+  'Sauce Labs Bolt T-Shirt',
+  'Sauce Labs Fleece Jacket',
+  'Sauce Labs Onesie',
+  'Test.allTheThings() T-Shirt (Red)'
+]
+Actual:   [
+  'Sauce Labs Backpack',
+  'Sauce Labs Bike Light',
+  'Sauce Labs Bolt T-Shirt',
+  'Sauce Labs Fleece Jacket',
+  'Sauce Labs Onesie',
+  'Test.allTheThings() T-Shirt (Red)'
+]
+[Sorting] Sort: za | user=performance_glitch_user
+Expected: [
+  'Test.allTheThings() T-Shirt (Red)',
+  'Sauce Labs Onesie',
+  'Sauce Labs Fleece Jacket',
+  'Sauce Labs Bolt T-Shirt',
+  'Sauce Labs Bike Light',
+  'Sauce Labs Backpack'
+]
+Actual:   [
+  'Test.allTheThings() T-Shirt (Red)',
+  'Sauce Labs Onesie',
+  'Sauce Labs Fleece Jacket',
+  'Sauce Labs Bolt T-Shirt',
+  'Sauce Labs Bike Light',
+  'Sauce Labs Backpack'
+]
+[Sorting] Sort: lohi | user=performance_glitch_user
+Expected: [ NaN, NaN, NaN, NaN, NaN, NaN ]
+Actual:   [ NaN, NaN, NaN, NaN, NaN, NaN ]
+[Sorting] Sort: hilo | user=performance_glitch_user
+Expected: [ NaN, NaN, NaN, NaN, NaN, NaN ]
+Actual:   [ NaN, NaN, NaN, NaN, NaN, NaN ]

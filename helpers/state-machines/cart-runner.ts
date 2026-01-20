@@ -9,7 +9,6 @@ export async function runCartScenario(
   user: User,
   actions: CartAction[]
 ) {
-
   let state: CartState = { count: 0, items: new Set() };
 
   for (const action of actions) {
@@ -28,7 +27,7 @@ export async function runCartScenario(
     if (user.capabilities.cart.badgeAccurate) {
       expect(
         badge,
-        `Badge mismatch after ${action.type} "${action.title}"`
+        `Cart badge after ${action.type} "${action.title}" (count=${state.count})`
       ).toBe(state.count);
     }
   }

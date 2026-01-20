@@ -48,7 +48,7 @@ export default defineConfig<TestOptions>({
     ],
     ["json", { outputFile: "test-results/jsonReport.json" }],
     ["junit", { outputFile: "test-results/junitReport.xml" }],
-    // ['allure-playwright'],
+    ['allure-playwright'],
     // block html reporter from opening automatically as it might block copilot
     ["html", { open: "never" }],
   ],
@@ -94,7 +94,7 @@ export default defineConfig<TestOptions>({
         browserName: "chromium",
         actionTimeout: 10000,
         navigationTimeout: 10000,
-        viewport: { width: 1920, height: 1080 },
+        // viewport: { width: 1920, height: 1080 },
         deviceScaleFactor: 1,
         launchOptions: {
           args: [
