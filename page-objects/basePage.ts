@@ -11,10 +11,10 @@ export abstract class BasePage {
 
   async open() {
     await this.page.goto(this.url);
-    await this.isPageLoaded();
+    await this.assertPageLoaded();
   }
 
-  async isPageLoaded() {
+  async assertPageLoaded() {
     await expect(this.pageReadyLocator).toBeVisible();
   }
 
@@ -24,8 +24,8 @@ export abstract class BasePage {
 
   /**
    * Overwrite to provide custom snapshot name/path
-   * @param snapshotName 
-   * @param options 
+   * @param snapshotName
+   * @param options
    *
    */
   async visualAssert(
@@ -36,6 +36,12 @@ export abstract class BasePage {
       maxDiffPixels: options?.maxDiffPixels ?? 150,
       animations: "disabled",
       caret: "hide",
+    });
+  }
+
+  async handlePageAlert(): Promise<void> {
+    this.page.once("dialog", async (dialog: any) => {
+      await dialog.accept();
     });
   }
 

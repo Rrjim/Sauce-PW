@@ -4,13 +4,11 @@ import { InventoryPage } from "../page-objects/inventoryPage";
 import {
   AssertionContext,
   InventoryItemData,
-  ItemAssertion,
-  SortByOption,
   SortKey,
   sortMapping,
 } from "../types/inventory-item";
 import { CartCapabilities, User } from "../types/login";
-import { readInventoryDataFromFile } from "./general";
+import { readDataFromFile } from "./general";
 import {
   assertPrice,
   assertDescription,
@@ -124,40 +122,39 @@ function getExpectedSortOrder(
 
 /** --- Validation Helpers --- **/
 
-export function validateInventoryIntegrity(
-  actual: Record<string, InventoryItemData>,
-  expected: Record<string, InventoryItemData>,
+export async function validateInventoryIntegrity(
+  inventoryPage: InventoryPage,
   user: User,
+  key: string,
   context: Omit<AssertionContext, "item">
 ) {
-  const actualNorm = normalizeInventoryRecord(actual);
-  const expectedNorm = normalizeInventoryRecord(expected);
+  const baseline = normalizeInventoryRecord(
+    readDataFromFile(key, "inventory")
+  );
 
-  const actualKeys = Object.keys(actualNorm);
-  const expectedKeys = Object.keys(expectedNorm);
+  const actual = normalizeInventoryRecord(
+    await inventoryPage.getInventoryData()
+  );
+
+  const expectedKeys = Object.keys(baseline);
+  const actualKeys = Object.keys(actual);
 
   expect(
     actualKeys,
-    `[Inventory] Item set for | user=${context.user} \n Actual: ${actualKeys} | \n Expected: ${expectedKeys} |`
+    `[Inventory] Item set | user=${context.user}`
   ).toEqual(expectedKeys);
 
-  // 2️⃣ Field-level assertions
   for (const title of expectedKeys) {
-    const actualItem = actualNorm[title];
-    const expectedItem = expectedNorm[title];
+    const itemCtx: AssertionContext = { ...context, item: title };
 
-    const itemCtx: AssertionContext = {
-      ...context,
-      item: title,
-    };
-
-    assertTitle(actualItem, expectedItem, itemCtx);
-    assertPrice(actualItem, expectedItem, itemCtx, user);
-    assertDescription(actualItem, expectedItem, itemCtx);
-    assertImgSrc(actualItem, expectedItem, itemCtx);
-    assertBtnText(actualItem, expectedItem, itemCtx);
+    assertTitle(actual[title], baseline[title], itemCtx);
+    assertPrice(actual[title], baseline[title], itemCtx, user);
+    assertDescription(actual[title], baseline[title], itemCtx);
+    assertImgSrc(actual[title], baseline[title], itemCtx);
+    assertBtnText(actual[title], baseline[title], itemCtx);
   }
 }
+
 
 
 /**
@@ -172,7 +169,7 @@ export async function validateInventorySorting(
   key: string
 ) {
   const baseline = normalizeInventoryRecord(
-    readInventoryDataFromFile(key, "inventory")
+    readDataFromFile(key, "inventory")
   );
 
   for (const sortKey of Object.keys(sortMapping) as SortKey[]) {
@@ -181,7 +178,11 @@ export async function validateInventorySorting(
     }
 
     if (sortKey !== "default") {
-      await inventoryPage.selectSort(sortKey, user);
+      await inventoryPage.sortSelect.selectOption(sortKey);
+    }
+
+    if (user.capabilities.sort.alertsOnSort) { 
+      inventoryPage.handlePageAlert()
     }
 
     const actual = normalizeInventoryRecord(

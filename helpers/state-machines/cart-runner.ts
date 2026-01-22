@@ -1,6 +1,8 @@
 import { InventoryPage } from "../../page-objects/inventoryPage";
-import { CartAction, CartState } from "../../types/inventory-item";
+import { CartAction, CartState, InventoryItemData } from "../../types/inventory-item";
 import { User } from "../../types/login";
+import { readDataFromFile } from "../general";
+import { getCartTestItems } from "../inventory";
 import { transitionCartState } from "./cart-machine";
 import { expect } from "@playwright/test";
 

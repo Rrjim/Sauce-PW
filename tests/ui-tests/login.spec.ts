@@ -17,14 +17,14 @@ test.describe("Login scenarios", () => {
 
       // --- login step ---
       await loginPage.open();
-      await loginPage.isPageLoaded();
+      await loginPage.assertPageLoaded();
       await loginPage.login(userRecord.username, password);
 
       // --- verification step ---
       const assertions = {
         successful: async () => {
           await inventoryPage.assertPageUrl();
-          await inventoryPage.isPageLoaded();
+          await inventoryPage.assertPageLoaded();
           // if (userRecord.username === "visual_user") return; // skip visual check for visual_user
           // await inventoryPage.visualAssert(`Login Scenarios - ${key}`);
           await inventoryPage.generateInventoryDatasetByUser(key);

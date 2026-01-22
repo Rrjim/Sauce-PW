@@ -5,8 +5,7 @@ import { Locator, Page, expect } from "@playwright/test";
 import urls from "../test-data/url/urls.qa.json";
 import type { InventoryItemData } from "../types/inventoryItemData";
 import { SortKey } from "../types/inventory-item";
-import { User } from "../types/login";
-import { writeInventoryDataToFile } from "../helpers/general";
+import { writeDataToFile } from "../helpers/general";
 
 export class InventoryPage extends BasePage {
   url = urls.inventory;
@@ -31,7 +30,9 @@ export class InventoryPage extends BasePage {
   // --- UI DATA EXTRACTION ---
 
   async getItems(): Promise<InventoryItem[]> {
+    // await this.waitForInventoryCount(6)
     const count = await this.inventoryItems.count();
+    console.log(`=====` + count);
     return Array.from(
       { length: count },
       (_, i) => new InventoryItem(this.inventoryItems.nth(i))
@@ -49,17 +50,7 @@ export class InventoryPage extends BasePage {
 
   async generateInventoryDatasetByUser(key: string) {
     const data = await this.getInventoryData();
-    writeInventoryDataToFile(key, "inventory", data);
-  }
-
-  async selectSort(option: SortKey, user: User): Promise<void> {
-    if (user.capabilities.sort.alertsOnSort) {
-      this.page.once("dialog", async (dialog) => {
-        await dialog.accept();
-      });
-    }
-
-    await this.sortSelect.selectOption(option);
+    writeDataToFile(key, "inventory", data);
   }
 
   async getItemByTitle(title: string): Promise<InventoryItem> {

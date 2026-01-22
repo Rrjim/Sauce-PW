@@ -1,7 +1,9 @@
 // test-helpers/cart/cart-scenarios.ts
 
-import { CartAction } from "../types/inventory-item";
-
+import { CartAction, InventoryItemData } from "../types/inventory-item";
+import { User } from "../types/login";
+import { readDataFromFile } from "./general";
+import { getCartTestItems } from "./inventory";
 
 export const fullCartLifecycle = (titles: string[]): CartAction[] => [
   ...titles.map((title): CartAction => ({ type: "ADD", title })),
@@ -15,6 +17,9 @@ export const fullCartLifecycle = (titles: string[]): CartAction[] => [
 //   ...titles.map((title) => ({ type: "REMOVE" as const, title })),
 // ];
 
+export function buildFullCartScenario(user: User, key: string) {
+  const fileData = readDataFromFile<InventoryItemData>(key, "inventory");
 
-
-
+  const titles = getCartTestItems(fileData, user.capabilities.cart);
+  return fullCartLifecycle(titles);
+}

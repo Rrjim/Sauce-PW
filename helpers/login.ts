@@ -15,7 +15,7 @@ export async function loginAndOpenInventory(
   await loginPage.open();
   await loginPage.login(user.username, password);
   await inventoryPage.assertPageUrl();
-  await inventoryPage.isPageLoaded();
+  await inventoryPage.assertPageLoaded();
 
   return inventoryPage;
 }
