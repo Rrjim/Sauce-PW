@@ -21,14 +21,6 @@ export type User = {
 
 
 export type UserMap = Record<string, User>
-export type UserKey = keyof UserMap & string
-
-// --- Fixture types ---
-export type LoginAsFixture = {
-  loginAs: (userKey: UserKey) => Promise<void>
-}
-
-
 
 export interface SortCapabilities {
   sortWorks: boolean;

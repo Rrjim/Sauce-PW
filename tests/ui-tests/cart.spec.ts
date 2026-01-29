@@ -82,7 +82,7 @@ test.describe("Cart - Cart finish checkout", () => {
       user.capabilities.checkout.lastNameOverwritesFirstName) 
     )
       return;
-    test(`Cart items checkout for ${key}`, async ({ pageManager }) => {
+    test(`Cart finish checkout for ${key}`, async ({ pageManager }) => {
       const inventoryPage = await performLoginFlow(pageManager, user, key);
 
       const addActions = buildAddOnlyCartScenario(user, key);

@@ -18,6 +18,6 @@ export function hasImage(
 
 export function hasButtonText(
   item: BaseItemData & OptionalFields
-): item is (InventoryItemData | CartItemData) {
+): item is InventoryItemData | CartItemData {
   return "buttonText" in item && typeof item.buttonText === "string";
 }

@@ -1,7 +1,8 @@
 import { Page, Locator } from "@playwright/test";
 import type { BaseItem } from "../individual/baseItem";
+import { CartItemData, CheckoutItemData, InventoryItemData } from "../../../utils/types/inventory-item";
 
-export class ItemList<T extends BaseItem, D = any> {
+export class ItemList<T extends BaseItem, D = InventoryItemData | CartItemData | CheckoutItemData> {
   constructor(
     private readonly page: Page,
     private readonly itemClass: new (locator: Locator) => T,

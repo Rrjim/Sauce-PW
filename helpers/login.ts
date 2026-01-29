@@ -10,20 +10,20 @@ import { argosScreenshot } from "@argos-ci/playwright";
 export async function performLoginFlow(
   pageManager: PageManager,
   user: User & { expect: "successful" },
-  key: string
+  key: string,
 ): Promise<InventoryPage>;
 
 export async function performLoginFlow(
   pageManager: PageManager,
   user: User & { expect: "unsuccessful" },
-  key: string
+  key: string,
 ): Promise<LoginPage>;
 
 // --- Implementation ---
 export async function performLoginFlow(
   pageManager: PageManager,
   user: User,
-  key: string
+  key: string,
 ): Promise<InventoryPage | LoginPage> {
   const loginPage = pageManager.onLoginPage();
   await loginPage.open();
@@ -36,8 +36,7 @@ export async function performLoginFlow(
     await inventoryPage.assertPageLoaded();
 
     if (process.env.GENERATE_INVENTORY_DATA === "true") {
-      const data: Record<string, InventoryItemData> =
-        await inventoryPage.items.getData();
+      const data = await inventoryPage.items.getData();
       writeDataToFile(key, "inventory", data);
     }
 

@@ -1,9 +1,9 @@
 import type { BaseItemData } from "../utils/types/inventory-item";
 import { normalizeRecord } from "./inventory-data";
 
-export function calculateItemsTotal<
-  T extends BaseItemData & { quantity?: number }
->(items: Record<string, T>): number {
+export function calculateItemsTotal<T extends BaseItemData>(
+  items: Record<string, T>
+): number {
   const normalized = normalizeRecord(items);
 
   return Object.values(normalized).reduce((sum, item) => {
@@ -12,3 +12,4 @@ export function calculateItemsTotal<
     return sum + price * qty;
   }, 0);
 }
+

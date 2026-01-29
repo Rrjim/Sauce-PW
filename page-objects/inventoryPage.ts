@@ -27,10 +27,6 @@ export class InventoryPage extends BasePage {
     return Number(await this.shoppingCartBadge.textContent());
   }
 
-  private async clickOnCartButton(): Promise<void> {
-    await this.shoppingCartLink.click();
-  }
-
   async goToCart(): Promise<CartPage> {
   await this.shoppingCartLink.click();
   const cartPage = this.pageManager.onCartPage();

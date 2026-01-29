@@ -1,0 +1,48 @@
+Actual: Sauce Labs Backpack 
+Expected: Sauce Labs Backpack
+Actual: carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection. 
+Expected: carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.
+Actual: /static/media/sauce-backpack-1200x1500.0a0b85a385945026062b.jpg 
+Expected: /static/media/sauce-backpack-1200x1500.0a0b85a385945026062b.jpg
+Actual: Add to cart 
+Expected: Add to cart
+Actual: Sauce Labs Bike Light 
+Expected: Sauce Labs Bike Light
+Actual: A red light isn't the desired state in testing but it sure helps when riding your bike at night. Water-resistant with 3 lighting modes, 1 AAA battery included. 
+Expected: A red light isn't the desired state in testing but it sure helps when riding your bike at night. Water-resistant with 3 lighting modes, 1 AAA battery included.
+Actual: /static/media/bike-light-1200x1500.37c843b09a7d77409d63.jpg 
+Expected: /static/media/bike-light-1200x1500.37c843b09a7d77409d63.jpg
+Actual: Add to cart 
+Expected: Add to cart
+Actual: Sauce Labs Bolt T-Shirt 
+Expected: Sauce Labs Bolt T-Shirt
+Actual: Get your testing superhero on with the Sauce Labs bolt T-shirt. From American Apparel, 100% ringspun combed cotton, heather gray with red bolt. 
+Expected: Get your testing superhero on with the Sauce Labs bolt T-shirt. From American Apparel, 100% ringspun combed cotton, heather gray with red bolt.
+Actual: /static/media/bolt-shirt-1200x1500.c2599ac5f0a35ed5931e.jpg 
+Expected: /static/media/bolt-shirt-1200x1500.c2599ac5f0a35ed5931e.jpg
+Actual: Add to cart 
+Expected: Add to cart
+Actual: Sauce Labs Fleece Jacket 
+Expected: Sauce Labs Fleece Jacket
+Actual: It's not every day that you come across a midweight quarter-zip fleece jacket capable of handling everything from a relaxing day outdoors to a busy day at the office. 
+Expected: It's not every day that you come across a midweight quarter-zip fleece jacket capable of handling everything from a relaxing day outdoors to a busy day at the office.
+Actual: /static/media/sauce-pullover-1200x1500.51d7ffaf301e698772c8.jpg 
+Expected: /static/media/sauce-pullover-1200x1500.51d7ffaf301e698772c8.jpg
+Actual: Add to cart 
+Expected: Add to cart
+Actual: Sauce Labs Onesie 
+Expected: Sauce Labs Onesie
+Actual: Rib snap infant onesie for the junior automation engineer in development. Reinforced 3-snap bottom closure, two-needle hemmed sleeved and bottom won't unravel. 
+Expected: Rib snap infant onesie for the junior automation engineer in development. Reinforced 3-snap bottom closure, two-needle hemmed sleeved and bottom won't unravel.
+Actual: /static/media/red-onesie-1200x1500.2ec615b271ef4c3bc430.jpg 
+Expected: /static/media/red-onesie-1200x1500.2ec615b271ef4c3bc430.jpg
+Actual: Add to cart 
+Expected: Add to cart
+Actual: Test.allTheThings() T-Shirt (Red) 
+Expected: Test.allTheThings() T-Shirt (Red)
+Actual: This classic Sauce Labs t-shirt is perfect to wear when cozying up to your keyboard to automate a few tests. Super-soft and comfy ringspun combed cotton. 
+Expected: This classic Sauce Labs t-shirt is perfect to wear when cozying up to your keyboard to automate a few tests. Super-soft and comfy ringspun combed cotton.
+Actual: /static/media/red-tatt-1200x1500.30dadef477804e54fc7b.jpg 
+Expected: /static/media/red-tatt-1200x1500.30dadef477804e54fc7b.jpg
+Actual: Add to cart 
+Expected: Add to cart

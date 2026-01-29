@@ -1,25 +1,21 @@
 import { BaseItemData, InventoryItemData, OptionalFields, SortableField, SortKey } from "../utils/types/inventory-item";
 import { CartCapabilities } from "../utils/types/login";
 import { sortMapping } from "../utils/types/inventory-item";
+import { Normalized } from "../utils/types/general";
 
-
-export function normalizeRecord<
-  T extends BaseItemData & Partial<OptionalFields>
->(
+export function normalizeRecord<T extends BaseItemData>(
   record: Record<string, T>
-): Record<string, T> {
+): Record<string, Normalized<T>> {
   return Object.fromEntries(
-    Object.entries(record).map(([key, item]) => [
+    Object.entries(record).map(([_, item]) => [
       item.title.trim(),
       {
         ...item,
         title: item.title.trim(),
         description: item.description.trim(),
         price: item.price.replace("$", "").trim(),
-
-        // normalize optional fields ONLY if they exist
-        imgSrc: item?.imgSrc ?? null, // always null if missing
-        buttonText: item?.buttonText ?? null, // same for optional fields
+        imgSrc: (item as any).imgSrc ?? null,
+        buttonText: (item as any).buttonText ?? null,
       },
     ])
   );
@@ -46,8 +42,8 @@ export const getCartTestItems = (
  * @param field Field to sort
  * @returns Either an array of strings or number, it depends on which field we want to use for sorting
  */
-export function projectField(
-  record: Record<string, BaseItemData & OptionalFields>,
+export function projectField<T extends BaseItemData>(
+  record: Record<string, T>,
   field: SortableField,
 ): (string | number)[] {
   const items = Object.values(record);
@@ -58,14 +54,15 @@ export function projectField(
 }
 
 
+
 /**
  * 
  * @param baseline Our dataset (expected data)
  * @param sortKey How to sort
  * @returns Sorted Array 
  */
-export function getExpectedSortOrder(
-  baseline: Record<string, BaseItemData & OptionalFields>,
+export function getExpectedSortOrder<T extends BaseItemData>(
+  baseline: Record<string, T>,
   sortKey: SortKey,
 ): (string | number)[] {
   const option = sortMapping[sortKey];
@@ -73,10 +70,13 @@ export function getExpectedSortOrder(
 
   const projected = projectField(baseline, option.field);
 
-  const sorted = [...projected].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  const sorted = [...projected].sort((a, b) =>
+    a < b ? -1 : a > b ? 1 : 0
+  );
 
   return option.descending ? sorted.reverse() : sorted;
 }
+
 
 
 // Normalize

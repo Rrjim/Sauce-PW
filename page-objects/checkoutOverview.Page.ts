@@ -1,7 +1,7 @@
 import { BasePage } from "./basePage";
 import { extractNumber } from "../utils/data/string-config";
 import { calculateItemsTotal } from "../helpers/priceCalculator";
-import type { CartItemData } from "../utils/types/inventory-item";
+import type { BaseItemData, CartItemData } from "../utils/types/inventory-item";
 import urls from "../test-data/url/urls.qa.json";
 import { expect, Page } from "@playwright/test";
 import { ItemList } from "./components/list/itemList";
@@ -35,23 +35,27 @@ export class CheckoutOverviewPage extends BasePage {
     return extractNumber(await this.priceTotal.textContent());
   }
 
-  async assertTotalsMatch(
-    expectedItems: Record<string, CartItemData>,
-    user: User,
-  ) {
-    if (!user.capabilities.checkout.priceAccurate) {
-      // Explicitly documented skip
-      return;
-    }
+  
 
-    const expectedSubtotal = calculateItemsTotal(expectedItems);
-    const actualSubtotal = await this.getItemSubtotal();
-    expect(actualSubtotal).toBe(expectedSubtotal);
-
-    const tax = await this.getTax();
-    const total = await this.getTotal();
-    expect(total).toBe(expectedSubtotal + tax);
+async assertTotalsMatch<
+  T extends BaseItemData & { quantity?: number }
+>(
+  expectedItems: Record<string, T>,
+  user: User,
+) {
+  if (!user.capabilities.checkout.priceAccurate) {
+    return;
   }
+
+  const expectedSubtotal = calculateItemsTotal(expectedItems);
+  const actualSubtotal = await this.getItemSubtotal();
+  expect(actualSubtotal).toBe(expectedSubtotal);
+
+  const tax = await this.getTax();
+  const total = await this.getTotal();
+  expect(total).toBe(expectedSubtotal + tax);
+}
+
 
   async finish() {
     await this.finishBtn.click();

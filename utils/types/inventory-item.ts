@@ -81,9 +81,3 @@ export interface AssertionContext {
   item?: string;
 }
 
-
-export interface HasItemList<D> {
-  items: {
-    getData(): Promise<Record<string, D>>;
-  };
-}

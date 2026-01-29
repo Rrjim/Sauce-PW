@@ -1,11 +1,12 @@
 // test-helpers/cart/cart-scenarios.ts
 
-import { CartAction, CartItemData, InventoryItemData } from "../utils/types/inventory-item";
+import { CartAction, CartItemData, CheckoutItemData, InventoryItemData } from "../utils/types/inventory-item";
 import { User } from "../utils/types/login";
 import { readDataFromFile } from "./resource-data-config";
 import { getCartTestItems } from "./inventory-data";
 import { InventoryPage } from "../page-objects/inventoryPage";
 import { CartPage } from "../page-objects/cartPage";
+import { ItemPage, PageItem } from "../utils/types/general";
 
 function loadTitles(user: User, key: string): string[] {
   const fileData = readDataFromFile<InventoryItemData>(key, "inventory");
@@ -40,17 +41,21 @@ export function buildAddOnlyCartScenario(user: User, key: string) {
  * Returns inventory items that should appear in the cart
  * based on ADD actions that were executed.
  */
-export async function getExpectedCartItems(
-  cartPage: CartPage | InventoryPage,
+
+
+export async function getExpectedCartItems<
+  D extends ItemPage<any>
+>(
+  itemPage: D,
   actions: CartAction[]
-): Promise<Record<string, CartItemData>> {
+): Promise<Record<string, PageItem<D>>> {
   const addedTitles = new Set(
     actions
       .filter(action => action.type === "ADD")
       .map(action => action.title)
   );
 
-  const cartData = await cartPage.items.getData();
+  const cartData = await itemPage.items.getData();
 
   return Object.fromEntries(
     Object.entries(cartData).filter(

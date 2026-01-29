@@ -21,15 +21,15 @@ import { CartPage } from "../page-objects/cartPage";
 import { CheckoutOverviewPage } from "../page-objects/checkoutOverview.Page";
 import { hasButtonText, hasImage } from "../utils/type-guards/guards";
 import { getPriceScope } from "./priceScope";
+import { PageItem } from "../utils/types/general";
 
 
 export async function validateInventoryIntegrity<
-  T extends BaseItemData & Partial<OptionalFields>,
   D extends InventoryPage | CartPage | CheckoutOverviewPage
 >(
   itemPage: D,
   user: User,
-  expectedData: Record<string, T>,
+  expectedData: Record<string, PageItem<D>>,
   context: Omit<AssertionContext, "item">,
 ) {
   const actual = normalizeRecord(await itemPage.items.getData());
@@ -44,25 +44,26 @@ export async function validateInventoryIntegrity<
     const a = actual[title];
     const e = expected[title];
 
-    console.log("Actual:", JSON.stringify(a, null, 2));
-    console.log("Expected:", JSON.stringify(e, null, 2));
-
-    // always valid
-    assertProperty(a.title, e.title, itemCtx, "Title")
-    assertProperty(a.description, e.description, itemCtx, "Description")
-    assertPrice(a.price, e.price, itemCtx, user, priceScope)
+    // console.log("Actual:", JSON.stringify(a, null, 2));
+    // console.log("Expected:", JSON.stringify(e, null, 2));
+    
+    // always valid (BaseItemData)
+    assertProperty(a.title, e.title, itemCtx, "Title");
+    assertProperty(a.description, e.description, itemCtx, "Description");
+    assertPrice(a.price, e.price, itemCtx, user, priceScope);
 
     // inventory-only
     if (hasImage(a) && hasImage(e)) {
-      assertProperty(a.imgSrc, e.imgSrc, itemCtx, "Image Source")
+      assertProperty(a.imgSrc, e.imgSrc, itemCtx, "Image Source");
     }
 
     // inventory + cart
     if (hasButtonText(a) && hasButtonText(e)) {
-      assertProperty(a.buttonText, e.buttonText, itemCtx, "Button Text")
+      assertProperty(a.buttonText, e.buttonText, itemCtx, "Button Text");
     }
   }
 }
+
 
 export async function validateInventorySorting(
   inventoryPage: InventoryPage,
