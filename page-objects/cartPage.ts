@@ -6,11 +6,12 @@ import { ItemList } from "./components/list/itemList";
 import { CartItemData } from "../utils/types/inventory-item";
 import { PageManager } from "./pageManager";
 import { CheckoutPage } from "./checkoutPage";
+import { ItemPage } from "../utils/types/general";
 
-export class CartPage extends BasePage {
+export class CartPage extends BasePage implements ItemPage<CartItemData> {
   url = urls.cart;
   pageReadyLocator = this.page.locator("[data-test='title']");
-  readonly items: ItemList<CartItem>;
+  readonly items: ItemList<CartItem, CartItemData>;
   readonly checkOutButton = this.page.getByRole("button", { name: "checkout" });
   readonly continueShoppingButton = this.page.getByRole("button", {
     name: "continue-shopping",
@@ -31,11 +32,7 @@ export class CartPage extends BasePage {
   async getItemQuantities(): Promise<Record<string, number>> {
     const data = await this.items.getData();
     const quantities: Record<string, number> = {};
-    // CartItemData cast is mandatory here to say that our data items has quantity property
-    for (const [title, item] of Object.entries(data) as [
-      string,
-      CartItemData,
-    ][]) {
+    for (const [title, item] of Object.entries(data)) {
       quantities[title] = item.quantity;
     }
     return quantities;

@@ -10,14 +10,15 @@ export function isUnsuccessfulUser(user: User): user is User & { expect: "unsucc
   return user.expect === "unsuccessful";
 }
 
-export function hasImage(
-  item: BaseItemData & OptionalFields
-): item is InventoryItemData & { imgSrc: string } {
-  return "imgSrc" in item && typeof item.imgSrc === "string";
+export function hasButtonText<T extends BaseItemData & OptionalFields>(
+  item: T
+): item is T & { buttonText: string } {
+  return typeof item.buttonText === "string";
 }
 
-export function hasButtonText(
-  item: BaseItemData & OptionalFields
-): item is InventoryItemData | CartItemData {
-  return "buttonText" in item && typeof item.buttonText === "string";
+export function hasImage<T extends BaseItemData & OptionalFields>(
+  item: T
+): item is T & { imgSrc: string } {
+  return typeof item.imgSrc === "string";
 }
+

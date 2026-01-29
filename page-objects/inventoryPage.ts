@@ -5,12 +5,14 @@ import { InventoryItem } from "./components/individual/inventoryItem";
 import { ItemList } from "./components/list/itemList";
 import { CartPage } from "./cartPage";
 import { PageManager } from "./pageManager";
+import { InventoryItemData } from "../utils/types/inventory-item";
+import { ItemPage } from "../utils/types/general";
 
-export class InventoryPage extends BasePage {
+export class InventoryPage extends BasePage implements ItemPage<InventoryItemData> {
   url = urls.inventory;
   pageReadyLocator = this.page.locator("[data-test='title']");
 
-  readonly items: ItemList<InventoryItem>;
+  readonly items: ItemList<InventoryItem, InventoryItemData>;
   readonly shoppingCartBadge = this.page.locator("[data-test='shopping-cart-badge']");
   readonly shoppingCartLink = this.page.locator("[data-test='shopping-cart-link']");
 

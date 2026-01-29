@@ -34,7 +34,6 @@ export async function performLoginFlow(
   if (user.expect === "successful") {
     const inventoryPage = pageManager.onInventoryPage();
     await inventoryPage.assertPageLoaded();
-
     if (process.env.GENERATE_INVENTORY_DATA === "true") {
       const data = await inventoryPage.items.getData();
       writeDataToFile(key, "inventory", data);

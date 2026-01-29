@@ -1,6 +1,6 @@
 // test-helpers/cart/cart-scenarios.ts
 
-import { CartAction, CartItemData, CheckoutItemData, InventoryItemData } from "../utils/types/inventory-item";
+import { BaseItemData, CartAction, CartItemData, CheckoutItemData, InventoryItemData } from "../utils/types/inventory-item";
 import { User } from "../utils/types/login";
 import { readDataFromFile } from "./resource-data-config";
 import { getCartTestItems } from "./inventory-data";
@@ -42,13 +42,13 @@ export function buildAddOnlyCartScenario(user: User, key: string) {
  * based on ADD actions that were executed.
  */
 
-
 export async function getExpectedCartItems<
-  D extends ItemPage<any>
+  T extends BaseItemData,
+  P extends ItemPage<T>
 >(
-  itemPage: D,
+  itemPage: P,
   actions: CartAction[]
-): Promise<Record<string, PageItem<D>>> {
+): Promise<Record<string, T>> {
   const addedTitles = new Set(
     actions
       .filter(action => action.type === "ADD")
@@ -63,4 +63,5 @@ export async function getExpectedCartItems<
     )
   );
 }
+
 

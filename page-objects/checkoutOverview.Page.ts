@@ -1,18 +1,19 @@
 import { BasePage } from "./basePage";
 import { extractNumber } from "../utils/data/string-config";
 import { calculateItemsTotal } from "../helpers/priceCalculator";
-import type { BaseItemData, CartItemData } from "../utils/types/inventory-item";
+import type { BaseItemData, CartItemData, CheckoutItemData } from "../utils/types/inventory-item";
 import urls from "../test-data/url/urls.qa.json";
 import { expect, Page } from "@playwright/test";
 import { ItemList } from "./components/list/itemList";
 import { PageManager } from "./pageManager";
 import { CheckoutItem } from "./components/individual/checkoutItem";
 import { User } from "../utils/types/login";
+import { ItemPage } from "../utils/types/general";
 
-export class CheckoutOverviewPage extends BasePage {
+export class CheckoutOverviewPage extends BasePage implements ItemPage<CheckoutItemData> {
   url = urls.checkout;
   pageReadyLocator = this.page.locator("[data-test='title']");
-  readonly items: ItemList<CheckoutItem>;
+  readonly items: ItemList<CheckoutItem, CheckoutItemData>;
   readonly priceItemTotal = this.page.locator("[data-test='subtotal-label']");
   readonly priceTaxTotal = this.page.locator("[data-test='tax-label']");
   readonly priceTotal = this.page.locator("[data-test='total-label']");

@@ -21,15 +21,17 @@ import { CartPage } from "../page-objects/cartPage";
 import { CheckoutOverviewPage } from "../page-objects/checkoutOverview.Page";
 import { hasButtonText, hasImage } from "../utils/type-guards/guards";
 import { getPriceScope } from "./priceScope";
-import { PageItem } from "../utils/types/general";
+import { ItemPage, PageItem } from "../utils/types/general";
+import { BasePage } from "../page-objects/basePage";
 
 
 export async function validateInventoryIntegrity<
-  D extends InventoryPage | CartPage | CheckoutOverviewPage
+  T extends BaseItemData,
+  P extends BasePage & ItemPage<T>
 >(
-  itemPage: D,
+  itemPage: P,
   user: User,
-  expectedData: Record<string, PageItem<D>>,
+  expectedData: Record<string, T>,
   context: Omit<AssertionContext, "item">,
 ) {
   const actual = normalizeRecord(await itemPage.items.getData());
@@ -44,25 +46,24 @@ export async function validateInventoryIntegrity<
     const a = actual[title];
     const e = expected[title];
 
-    // console.log("Actual:", JSON.stringify(a, null, 2));
-    // console.log("Expected:", JSON.stringify(e, null, 2));
-    
-    // always valid (BaseItemData)
+    // BaseItemData assertions
     assertProperty(a.title, e.title, itemCtx, "Title");
     assertProperty(a.description, e.description, itemCtx, "Description");
     assertPrice(a.price, e.price, itemCtx, user, priceScope);
 
-    // inventory-only
+    // Inventory-only
     if (hasImage(a) && hasImage(e)) {
       assertProperty(a.imgSrc, e.imgSrc, itemCtx, "Image Source");
     }
 
-    // inventory + cart
+    // Inventory + Cart
     if (hasButtonText(a) && hasButtonText(e)) {
       assertProperty(a.buttonText, e.buttonText, itemCtx, "Button Text");
     }
   }
 }
+
+
 
 
 export async function validateInventorySorting(
