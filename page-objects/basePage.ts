@@ -1,12 +1,17 @@
 import { Page, Locator, expect } from "@playwright/test";
+import { PageManager } from "./pageManager";
 
 export abstract class BasePage {
   protected readonly page: Page;
+  protected readonly pageManager: PageManager
   protected abstract readonly url: string;
   protected abstract readonly pageReadyLocator: Locator;
+  protected readonly errorMessage: Locator
 
-  constructor(page: Page) {
-    this.page = page;
+  constructor(page: Page, pageManager: PageManager) {
+    this.page = page
+    this.pageManager = pageManager
+    this.errorMessage = this.page.locator('[data-test="error"]')
   }
 
   async open() {
@@ -20,6 +25,11 @@ export abstract class BasePage {
 
   async assertPageUrl() {
     await expect(this.page).toHaveURL(this.url);
+  }
+
+  async expectError(text: string) {
+    await expect(this.errorMessage).toBeVisible();
+    await expect(this.errorMessage).toHaveText(text);
   }
 
   /**

@@ -1,0 +1,26 @@
+The state for user: [object Object] is count: 3 | items: {
+  'Sauce Labs Backpack': 1,
+  'Sauce Labs Bike Light': 1,
+  'Sauce Labs Onesie': 1
+}
+The state for user: [object Object] | count: 3
+{
+  "Sauce Labs Backpack": 1,
+  "Sauce Labs Bike Light": 1,
+  "Sauce Labs Onesie": 1
+}
+Actual: {
+  "title": "Sauce Labs Backpack",
+  "description": "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.",
+  "price": "29.99",
+  "buttonText": "Remove",
+  "quantity": 1,
+  "imgSrc": null
+}
+Expected: {
+  "title": "Sauce Labs Backpack",
+  "description": "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.",
+  "price": "29.99",
+  "imgSrc": "/static/media/sl-404.168b1cce10384b857a6f.jpg",
+  "buttonText": "Remove"
+}

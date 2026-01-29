@@ -1,9 +1,12 @@
 import { expect } from "@playwright/test";
 import {
   AssertionContext,
+  CartItemData,
+  CheckoutItemData,
   InventoryItemData,
-} from "../types/inventory-item";
-import { User } from "../types/login";
+  PriceScope,
+} from "../utils/types/inventory-item";
+import { User } from "../utils/types/login";
 
 // page agnostic because inventory items are located in different pages
 
@@ -15,7 +18,7 @@ function formatContext(ctx: AssertionContext): string {
 
 export function assertTitle(
   actual: InventoryItemData,
-  expected: InventoryItemData,
+  expected: InventoryItemData | CartItemData | CheckoutItemData,
   context: AssertionContext
 ) {
   const message = formatContext(context) + `\n Assertion[Title]: \n Actual: ${actual.title} \n Expected: ${expected.title}`;
@@ -25,22 +28,26 @@ export function assertTitle(
 
 export function assertPrice(
   actual: InventoryItemData,
-  expected: InventoryItemData,
+  expected: InventoryItemData | CartItemData | CheckoutItemData,
   context: AssertionContext,
-  user: User
+  user: User,
+  scope: PriceScope
 ) {
-  const message = formatContext(context) + `\n Assertion[Price]: \n Actual: ${actual.price} \n Expected: ${expected.price}`;
+  const message =
+    formatContext(context) +
+    `\n Assertion[Price]:\n Actual: ${actual.price}\n Expected: ${expected.price}`;
 
-  if (!user.capabilities.sort?.priceAccurate) {
+  if (scope === "unstable" && !user.capabilities.sort.priceAccurate) {
     expect(actual.price, message).not.toEqual(expected.price);
   } else {
     expect(actual.price, message).toEqual(expected.price);
   }
 }
 
+
 export function assertDescription(
   actual: InventoryItemData,
-  expected: InventoryItemData,
+  expected: InventoryItemData | CartItemData | CheckoutItemData,
   context: AssertionContext
 ) {
   const message = formatContext(context) + `\n Assertion[Description]: \n Actual: ${actual.description} \n Expected: ${expected.description}`;
@@ -57,8 +64,8 @@ export function assertImgSrc(
 }
 
 export function assertBtnText(
-  actual: InventoryItemData,
-  expected: InventoryItemData,
+  actual: InventoryItemData | CartItemData,
+  expected: InventoryItemData | CartItemData,
   context: AssertionContext
 ) {
   const message = formatContext(context) + `\n Assertion[Button Text]: \n Actual: ${actual.buttonText} \n Expected: ${expected.buttonText}`;

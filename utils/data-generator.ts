@@ -1,3 +1,4 @@
+import { randomInt } from 'crypto';
 import articleRequestPayload from '../request-objects/articles/POST_article.json'
 import userRequestPayload from '../request-objects/users/POST_user.json'
 import { faker } from '@faker-js/faker';
@@ -21,4 +22,13 @@ export function getNewRandomUser(wordLength: number) {
     userRequest.user.username = faker.lorem.word({length: wordLength,strategy: 'any-length'});
     userRequest.user.password = faker.lorem.word(1)
     return userRequest
+}
+
+
+export function getRandomInputText(input?: string, givenLength?: number): string {
+    return input + faker.lorem.word({length: givenLength})
+}
+
+export function getRandomInputNumber(input?: number, givenLength?: number): String {
+    return new String(input + randomInt(givenLength))
 }

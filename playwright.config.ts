@@ -7,7 +7,8 @@ import type { TestOptions } from "./test-options";
  * https://github.com/motdotla/dotenv
  */
 dotenv.config();
-const users = JSON.parse(process.env.USERS_JSON || "{}");
+// We can initialize users in here
+// const users = JSON.parse(process.env.USERS_JSON || "{}");
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 

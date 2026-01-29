@@ -1,43 +1,33 @@
-import { argosScreenshot } from "@argos-ci/playwright";
 import { test } from "../../fixtures/test-options";
 import userData from "../../test-data/user/users.qa.json";
-import { UserMap } from "../../types/login";
+import { UserMap } from "../../utils/types/login";
+import { performLoginFlow } from "../../helpers/login";
+import { isSuccessfulUser, isUnsuccessfulUser } from "../../utils/type-guards/guards";
 
 const users = userData as UserMap;
 
 test.describe("Login scenarios", () => {
   for (const [key, userRecord] of Object.entries(users)) {
     test(`${key} login is ${userRecord.expect}`, async ({ pageManager }) => {
-      const loginPage = pageManager.onLoginPage();
-      const inventoryPage = pageManager.onInventoryPage();
-      const page = pageManager.getPage();
+      if (isSuccessfulUser(userRecord)) {
+        // TS knows this is a successful user now
+        await performLoginFlow(
+          pageManager,
+          userRecord,
+          key
+        );
 
-      const password =
-        process.env[userRecord.passwordKey] ?? userRecord.passwordKey;
+        // You can continue using inventoryPage as InventoryPage
+        // e.g., assert page loaded, take screenshot, generate data, etc.
+      } else if(isUnsuccessfulUser(userRecord)){
+        // TS knows this is an unsuccessful user now
+        await performLoginFlow(
+          pageManager,
+          userRecord,
+          key
+        );
 
-      // --- login step ---
-      await loginPage.open();
-      await loginPage.assertPageLoaded();
-      await loginPage.login(userRecord.username, password);
-
-      // --- verification step ---
-      const assertions = {
-        successful: async () => {
-          await inventoryPage.assertPageUrl();
-          await inventoryPage.assertPageLoaded();
-          // if (userRecord.username === "visual_user") return; // skip visual check for visual_user
-          // await inventoryPage.visualAssert(`Login Scenarios - ${key}`);
-          await inventoryPage.generateInventoryDatasetByUser(key);
-
-          await argosScreenshot(page, `Login Scenarios - ${key}`);
-        },
-        unsuccessful: async () => {
-          await loginPage.expectError(userRecord.errorText!);
-          // await loginPage.visualAssert(`Login Scenarios - ${key}`);
-          await argosScreenshot(page, `Login Scenarios - ${key}`);
-        },
-      };
-      await assertions[userRecord.expect]();
+      }
     });
   }
 });
