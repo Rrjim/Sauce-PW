@@ -3,9 +3,6 @@ import { InventoryPage } from "../page-objects/inventoryPage";
 import {
   AssertionContext,
   BaseItemData,
-  CartItemData,
-  CheckoutItemData,
-  InventoryItemData,
   OptionalFields,
   SortKey,
 } from "../utils/types/inventory-item";
@@ -13,10 +10,7 @@ import { User } from "../utils/types/login";
 import { readDataFromFile } from "./resource-data-config";
 import {
   assertPrice,
-  assertDescription,
-  assertImgSrc,
-  assertBtnText,
-  assertTitle,
+  assertProperty,
 } from "./inventory-assertions";
 import {
   normalizeRecord,
@@ -28,13 +22,14 @@ import { CheckoutOverviewPage } from "../page-objects/checkoutOverview.Page";
 import { hasButtonText, hasImage } from "../utils/type-guards/guards";
 import { getPriceScope } from "./priceScope";
 
-export async function validateInventoryIntegrity(
-  itemPage: InventoryPage | CartPage | CheckoutOverviewPage,
+
+export async function validateInventoryIntegrity<
+  T extends BaseItemData & Partial<OptionalFields>,
+  D extends InventoryPage | CartPage | CheckoutOverviewPage
+>(
+  itemPage: D,
   user: User,
-  expectedData: Record<
-    string,
-    InventoryItemData | CartItemData | CheckoutItemData
-  >,
+  expectedData: Record<string, T>,
   context: Omit<AssertionContext, "item">,
 ) {
   const actual = normalizeRecord(await itemPage.items.getData());
@@ -51,19 +46,20 @@ export async function validateInventoryIntegrity(
 
     console.log("Actual:", JSON.stringify(a, null, 2));
     console.log("Expected:", JSON.stringify(e, null, 2));
+
     // always valid
-    assertTitle(a, e, itemCtx);
-    assertPrice(a, e, itemCtx, user, priceScope);
-    assertDescription(a, e, itemCtx);
+    assertProperty(a.title, e.title, itemCtx, "Title")
+    assertProperty(a.description, e.description, itemCtx, "Description")
+    assertPrice(a.price, e.price, itemCtx, user, priceScope)
 
     // inventory-only
     if (hasImage(a) && hasImage(e)) {
-      assertImgSrc(a, e, itemCtx);
+      assertProperty(a.imgSrc, e.imgSrc, itemCtx, "Image Source")
     }
 
     // inventory + cart
     if (hasButtonText(a) && hasButtonText(e)) {
-      assertBtnText(a, e, itemCtx);
+      assertProperty(a.buttonText, e.buttonText, itemCtx, "Button Text")
     }
   }
 }

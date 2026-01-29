@@ -1,6 +1,6 @@
 import { test } from "../../fixtures/test-options";
 import userData from "../../test-data/user/users.qa.json";
-import { User, UserMap } from "../../utils/types/login";
+import { UserMap } from "../../utils/types/login";
 import { performLoginFlow } from "../../helpers/login";
 import {
   validateInventoryIntegrity,
@@ -10,7 +10,6 @@ import { runCartScenario } from "../../helpers/state-machines/cart-runner";
 import { buildFullCartScenario } from "../../helpers/cart";
 import { readDataFromFile } from "../../helpers/resource-data-config";
 import { InventoryItemData } from "../../utils/types/inventory-item";
-import { InventoryPage } from "../../page-objects/inventoryPage";
 import { isSuccessfulUser } from "../../utils/type-guards/guards";
 
 const users = userData as UserMap;

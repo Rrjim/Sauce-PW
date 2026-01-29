@@ -28,8 +28,8 @@ export abstract class BasePage {
   }
 
   async expectError(text: string) {
-    await expect(this.errorMessage).toBeVisible();
-    await expect(this.errorMessage).toHaveText(text);
+    await expect(this.errorMessage, 'The error message is visible').toBeVisible();
+    await expect(this.errorMessage, 'Error Messages expected text is correct').toHaveText(text);
   }
 
   /**

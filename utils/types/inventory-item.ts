@@ -31,6 +31,7 @@ export interface BaseItemData {
 export type OptionalFields = {
   imgSrc?: string | null;
   buttonText?: string | null;
+  quantity?: number | null;
 };
 
 export type PriceScope = "checkout" | "unstable";

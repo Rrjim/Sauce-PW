@@ -5,7 +5,6 @@ import type { CartItemData } from "../utils/types/inventory-item";
 import urls from "../test-data/url/urls.qa.json";
 import { expect, Page } from "@playwright/test";
 import { ItemList } from "./components/list/itemList";
-import { BaseItem } from "./components/individual/baseItem";
 import { PageManager } from "./pageManager";
 import { CheckoutItem } from "./components/individual/checkoutItem";
 import { User } from "../utils/types/login";
@@ -13,7 +12,7 @@ import { User } from "../utils/types/login";
 export class CheckoutOverviewPage extends BasePage {
   url = urls.checkout;
   pageReadyLocator = this.page.locator("[data-test='title']");
-  readonly items: ItemList<BaseItem>;
+  readonly items: ItemList<CheckoutItem>;
   readonly priceItemTotal = this.page.locator("[data-test='subtotal-label']");
   readonly priceTaxTotal = this.page.locator("[data-test='tax-label']");
   readonly priceTotal = this.page.locator("[data-test='total-label']");
