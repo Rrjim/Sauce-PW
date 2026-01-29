@@ -1,5 +1,5 @@
 import { BasePage } from "./basePage";
-import { extractNumber } from "../utils/data/stringConfig";
+import { extractNumber } from "../utils/data/string-config";
 import { calculateItemsTotal } from "../helpers/priceCalculator";
 import type { CartItemData } from "../utils/types/inventory-item";
 import urls from "../test-data/url/urls.qa.json";
